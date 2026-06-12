@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Site;
 
-use Illuminate\Support\Facades\View;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Validate;
@@ -36,8 +36,8 @@ class Contact extends Component
         $this->reset(['nome', 'email', 'assunto', 'mensagem']);
     }
 
-    public function render()
+    public function render(): View
     {
-        return View::make('livewire.site.contact');
+        return view('livewire.site.contact');
     }
 }

@@ -8,9 +8,11 @@ use App\Models\Album;
 use App\Models\Team;
 use Flux\Flux;
 use Illuminate\Support\Carbon;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
 #[Layout('components.layouts.admin')]
@@ -29,18 +31,22 @@ class AlbumForm extends Component
 
     public ?string $data = null;
 
+    /** @var TemporaryUploadedFile|null */
     public $capa = null;
 
     public ?string $capaAtual = null;
 
+    /** @var array<int, TemporaryUploadedFile> */
     public array $novasFotos = [];
 
+    /** @var array<int, string|null> */
     public array $legendas = [];
 
     public function mount(?Album $album = null): void
     {
         if ($album && $album->exists) {
             $this->album = $album;
+            $album->load('photos');
             $this->team_id = $album->team_id;
             $this->titulo = $album->titulo;
             $this->descricao = $album->descricao ?? '';
@@ -53,6 +59,9 @@ class AlbumForm extends Component
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function rules(): array
     {
         return [
@@ -78,7 +87,7 @@ class AlbumForm extends Component
         }
     }
 
-    public function save()
+    public function save(): mixed
     {
         $validated = $this->validate();
 
@@ -108,7 +117,7 @@ class AlbumForm extends Component
         return $this->redirectRoute('admin.albums.edit', $this->album, navigate: true);
     }
 
-    public function guardarFotos()
+    public function guardarFotos(): void
     {
         if (! $this->album) {
             Flux::toast(variant: 'danger', text: 'Guarde primeiro a galeria.');
@@ -183,7 +192,7 @@ class AlbumForm extends Component
         $this->legendas = $this->album->photos()->pluck('legenda', 'id')->toArray();
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.admin.albums.form', [
             'teams' => Team::orderBy('ordem')->orderBy('nome')->get(),

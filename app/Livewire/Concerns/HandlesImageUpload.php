@@ -12,7 +12,13 @@ trait HandlesImageUpload
      */
     protected function storeImage(TemporaryUploadedFile $file, string $directory): string
     {
-        return $file->store($directory, 'public');
+        $path = $file->store($directory, 'public');
+
+        if ($path === false) {
+            throw new \RuntimeException('Failed to store uploaded image.');
+        }
+
+        return $path;
     }
 
     /**

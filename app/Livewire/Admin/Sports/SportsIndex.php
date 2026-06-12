@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Sports;
 
 use App\Models\Sport;
 use Flux\Flux;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -32,7 +33,7 @@ class SportsIndex extends Component
         Flux::toast(variant: 'success', text: 'Modalidade eliminada.');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.admin.sports.index', [
             'sports' => Sport::withCount('teams')->orderBy('nome')->get(),

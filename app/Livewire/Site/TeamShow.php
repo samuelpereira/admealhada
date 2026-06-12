@@ -3,7 +3,8 @@
 namespace App\Livewire\Site;
 
 use App\Models\Team;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\View as ViewFacade;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -17,9 +18,9 @@ class TeamShow extends Component
         $this->team = $team->load(['sport', 'players']);
     }
 
-    public function render()
+    public function render(): View
     {
-        return View::make('livewire.site.team-show', [
+        return ViewFacade::make('livewire.site.team-show', [
             'jogadores' => $this->team->players->where('papel', 'jogador'),
             'staff' => $this->team->players->where('papel', '!=', 'jogador'),
             'proximosJogos' => $this->team->games()->proximos()->take(5)->get(),

@@ -7,7 +7,7 @@ use App\Models\News;
 use App\Models\Sponsor;
 use App\Models\Sport;
 use App\Models\Team;
-use Illuminate\Support\Facades\View;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -16,9 +16,9 @@ use Livewire\Component;
 #[Title('Início')]
 class Home extends Component
 {
-    public function render()
+    public function render(): View
     {
-        return View::make('livewire.site.home', [
+        return view('livewire.site.home', [
             'proximosJogos' => Game::query()->with('team')->proximos()->take(4)->get(),
             'ultimosResultados' => Game::query()->with('team')->resultados()->take(4)->get(),
             'noticias' => News::query()->publicadas()->take(3)->get(),

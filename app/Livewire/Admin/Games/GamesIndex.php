@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Games;
 use App\Models\Game;
 use App\Models\Team;
 use Flux\Flux;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -23,7 +24,7 @@ class GamesIndex extends Component
     #[Url]
     public string $estado = '';
 
-    public function updating($name): void
+    public function updating(string $name): void
     {
         if (in_array($name, ['team', 'estado'], true)) {
             $this->resetPage();
@@ -37,7 +38,7 @@ class GamesIndex extends Component
         Flux::toast(variant: 'success', text: 'Jogo eliminado.');
     }
 
-    public function render()
+    public function render(): View
     {
         $games = Game::query()
             ->with('team')

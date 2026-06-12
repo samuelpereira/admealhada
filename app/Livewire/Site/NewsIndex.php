@@ -3,7 +3,7 @@
 namespace App\Livewire\Site;
 
 use App\Models\News;
-use Illuminate\Support\Facades\View;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -25,7 +25,7 @@ class NewsIndex extends Component
         $this->resetPage();
     }
 
-    public function render()
+    public function render(): View
     {
         $categorias = News::query()
             ->publicadas()
@@ -38,7 +38,7 @@ class NewsIndex extends Component
             ->when($this->categoria !== '', fn ($q) => $q->where('categoria', $this->categoria))
             ->paginate(9);
 
-        return View::make('livewire.site.news-index', [
+        return view('livewire.site.news-index', [
             'noticias' => $noticias,
             'categorias' => $categorias,
         ]);

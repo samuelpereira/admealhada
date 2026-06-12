@@ -3,7 +3,7 @@
 namespace App\Livewire\Site;
 
 use App\Models\Album;
-use Illuminate\Support\Facades\View;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -12,9 +12,9 @@ use Livewire\Component;
 #[Title('Galeria')]
 class Gallery extends Component
 {
-    public function render()
+    public function render(): View
     {
-        return View::make('livewire.site.gallery', [
+        return view('livewire.site.gallery', [
             'albuns' => Album::query()
                 ->with('team')
                 ->withCount('photos')

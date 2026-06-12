@@ -4,7 +4,7 @@ namespace App\Livewire\Site;
 
 use App\Models\Player;
 use App\Models\Team;
-use Illuminate\Support\Facades\View;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -13,9 +13,9 @@ use Livewire\Component;
 #[Title('O Clube')]
 class About extends Component
 {
-    public function render()
+    public function render(): View
     {
-        return View::make('livewire.site.about', [
+        return view('livewire.site.about', [
             'totalEquipas' => Team::count(),
             'totalAtletas' => Player::where('papel', 'jogador')->count(),
         ]);

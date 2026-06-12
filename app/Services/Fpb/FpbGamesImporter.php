@@ -136,7 +136,7 @@ class FpbGamesImporter
             if (! $player->exists) {
                 $player->fill([
                     'nome' => $j['nome'],
-                    'numero' => $j['numero'] !== '' ? $j['numero'] : null,
+                    'numero' => $j['numero'] !== '' ? (int) $j['numero'] : null,
                     'posicao' => $j['posicao'] !== '' ? $j['posicao'] : null,
                     'papel' => 'jogador',
                     'ordem' => 0,
@@ -151,7 +151,7 @@ class FpbGamesImporter
             // Atualiza apenas dados oficiais; preserva foto, papel, ordem e
             // posição introduzidos manualmente (a FPB nem sempre os fornece).
             $player->nome = $j['nome'];
-            $player->numero = $j['numero'] !== '' ? $j['numero'] : null;
+            $player->numero = $j['numero'] !== '' ? (int) $j['numero'] : null;
 
             if ($j['posicao'] !== '') {
                 $player->posicao = $j['posicao'];

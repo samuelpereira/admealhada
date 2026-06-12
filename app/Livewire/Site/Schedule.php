@@ -5,7 +5,7 @@ namespace App\Livewire\Site;
 use App\Models\Game;
 use App\Models\Team;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\View;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -76,12 +76,15 @@ class Schedule extends Component
             ->map(fn ($data) => Game::epocaFromDate(Carbon::parse($data)))
             ->unique();
 
-        return collect($predefinidas)
+        /** @var list<string> $epocas */
+        $epocas = collect($predefinidas)
             ->merge($dasBd)
             ->unique()
             ->sort()
             ->values()
             ->all();
+
+        return $epocas;
     }
 
     /**
@@ -112,7 +115,7 @@ class Schedule extends Component
         return $options;
     }
 
-    public function render()
+    public function render(): View
     {
         $proximos = Game::query()
             ->with('team')
@@ -135,7 +138,7 @@ class Schedule extends Component
             ->take($this->resultadosLimit)
             ->get();
 
-        return View::make('livewire.site.schedule', [
+        return view('livewire.site.schedule', [
             'equipas' => Team::query()->orderBy('ordem')->get(),
             'epocas' => $this->epocaOptions(),
             'competicoes' => $this->competicaoOptions(),

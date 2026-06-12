@@ -8,9 +8,12 @@ use App\Models\Sport;
 use App\Models\Team;
 use App\Services\Fpb\FpbGamesImporter;
 use Flux\Flux;
+use Illuminate\Support\Arr;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 use Throwable;
 
@@ -38,6 +41,7 @@ class TeamForm extends Component
 
     public int $ordem = 0;
 
+    /** @var TemporaryUploadedFile|null */
     public $foto = null;
 
     public ?string $fotoAtual = null;
@@ -60,6 +64,9 @@ class TeamForm extends Component
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function rules(): array
     {
         return [
@@ -137,11 +144,11 @@ class TeamForm extends Component
         }
     }
 
-    public function save()
+    public function save(): mixed
     {
         $validated = $this->validate();
 
-        $data = collect($validated)->except('foto')->toArray();
+        $data = Arr::except($validated, ['foto']);
         $data['slug'] = $this->uniqueSlug($this->nome, 'teams', $this->team?->id);
 
         if ($this->foto) {
@@ -170,7 +177,7 @@ class TeamForm extends Component
         return $this->redirectRoute('admin.teams.edit', $team, navigate: true);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.admin.teams.form', [
             'sports' => Sport::orderBy('nome')->get(),

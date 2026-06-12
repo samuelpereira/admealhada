@@ -7,9 +7,11 @@ use App\Livewire\Concerns\HandlesImageUpload;
 use App\Models\News;
 use Flux\Flux;
 use Illuminate\Support\Carbon;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
 #[Layout('components.layouts.admin')]
@@ -32,10 +34,12 @@ class NewsForm extends Component
 
     public ?string $publicado_em = null;
 
+    /** @var TemporaryUploadedFile|null */
     public $capa = null;
 
     public ?string $capaAtual = null;
 
+    /** @var array<int, string> */
     public array $categorias = ['Clube', 'Competição', 'Formação', 'Eventos'];
 
     public function mount(?News $news = null): void
@@ -52,6 +56,9 @@ class NewsForm extends Component
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function rules(): array
     {
         return [
@@ -79,7 +86,7 @@ class NewsForm extends Component
         }
     }
 
-    public function save()
+    public function save(): mixed
     {
         $validated = $this->validate();
 
@@ -109,7 +116,7 @@ class NewsForm extends Component
         return $this->redirectRoute('admin.news.index', navigate: true);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.admin.news.form');
     }

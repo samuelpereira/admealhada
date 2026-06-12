@@ -6,6 +6,7 @@ use App\Livewire\Concerns\HandlesImageUpload;
 use App\Models\Player;
 use App\Models\Team;
 use Flux\Flux;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
@@ -28,7 +29,7 @@ class PlayersIndex extends Component
         Flux::toast(variant: 'success', text: 'Jogador eliminado.');
     }
 
-    public function render()
+    public function render(): View
     {
         $players = Player::query()
             ->with('team')

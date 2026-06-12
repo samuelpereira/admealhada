@@ -2,12 +2,23 @@
 
 namespace App\Models;
 
+use Database\Factories\SportFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
+/**
+ * @property int $id
+ * @property string $nome
+ * @property string $slug
+ * @property string|null $descricao
+ * @property bool $ativo
+ *
+ * @use HasFactory<SportFactory>
+ */
 class Sport extends Model
 {
+    /** @use HasFactory<SportFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -24,6 +35,7 @@ class Sport extends Model
         ];
     }
 
+    /** @return HasMany<Team, $this> */
     public function teams(): HasMany
     {
         return $this->hasMany(Team::class);

@@ -8,6 +8,7 @@ use App\Models\News;
 use App\Models\Player;
 use App\Models\Team;
 use Illuminate\Support\Carbon;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -16,7 +17,7 @@ use Livewire\Component;
 #[Title('Backoffice')]
 class Dashboard extends Component
 {
-    public function render()
+    public function render(): View
     {
         return view('livewire.admin.dashboard', [
             'totals' => [

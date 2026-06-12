@@ -6,9 +6,12 @@ use App\Livewire\Concerns\HandlesImageUpload;
 use App\Models\Player;
 use App\Models\Team;
 use Flux\Flux;
+use Illuminate\Support\Arr;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
 #[Layout('components.layouts.admin')]
@@ -23,7 +26,7 @@ class PlayerForm extends Component
 
     public string $nome = '';
 
-    public ?string $numero = null;
+    public ?int $numero = null;
 
     public string $posicao = '';
 
@@ -33,10 +36,12 @@ class PlayerForm extends Component
 
     public int $ordem = 0;
 
+    /** @var TemporaryUploadedFile|null */
     public $foto = null;
 
     public ?string $fotoAtual = null;
 
+    /** @var array<int, string> */
     public array $papeis = ['jogador', 'treinador', 'treinador-adjunto', 'delegado', 'fisioterapeuta'];
 
     public function mount(?Player $player = null, ?string $team = null): void
@@ -56,12 +61,15 @@ class PlayerForm extends Component
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function rules(): array
     {
         return [
             'team_id' => ['required', 'exists:teams,id'],
             'nome' => ['required', 'string', 'max:255'],
-            'numero' => ['nullable', 'string', 'max:10'],
+            'numero' => ['nullable', 'integer', 'min:0', 'max:99'],
             'posicao' => ['nullable', 'string', 'max:50'],
             'ano_nascimento' => ['nullable', 'integer', 'min:1950', 'max:'.(date('Y'))],
             'papel' => ['required', 'string', 'max:50'],
@@ -84,11 +92,11 @@ class PlayerForm extends Component
         }
     }
 
-    public function save()
+    public function save(): mixed
     {
         $validated = $this->validate();
 
-        $data = collect($validated)->except('foto')->toArray();
+        $data = Arr::except($validated, ['foto']);
 
         if ($this->foto) {
             $this->deleteImage($this->fotoAtual);
@@ -106,7 +114,7 @@ class PlayerForm extends Component
         return $this->redirectRoute('admin.players.index', navigate: true);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.admin.players.form', [
             'teams' => Team::orderBy('ordem')->orderBy('nome')->get(),

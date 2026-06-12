@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Albums;
 use App\Livewire\Concerns\HandlesImageUpload;
 use App\Models\Album;
 use Flux\Flux;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -27,7 +28,7 @@ class AlbumsIndex extends Component
         Flux::toast(variant: 'success', text: 'Galeria eliminada.');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.admin.albums.index', [
             'albums' => Album::query()

@@ -6,6 +6,7 @@ use App\Models\Game;
 use App\Models\Team;
 use Flux\Flux;
 use Illuminate\Support\Carbon;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -28,7 +29,7 @@ class GameForm extends Component
 
     public string $competicao = '';
 
-    public ?string $jornada = null;
+    public ?int $jornada = null;
 
     public string $estado = 'agendado';
 
@@ -36,6 +37,7 @@ class GameForm extends Component
 
     public ?int $pontos_fora = null;
 
+    /** @var array<int, string> */
     public array $estados = ['agendado', 'terminado', 'adiado', 'cancelado'];
 
     public function mount(?Game $game = null): void
@@ -44,7 +46,7 @@ class GameForm extends Component
             $this->game = $game;
             $this->team_id = $game->team_id;
             $this->adversario = $game->adversario;
-            $this->data_hora = $game->data_hora?->format('Y-m-d\TH:i');
+            $this->data_hora = $game->data_hora->format('Y-m-d\TH:i');
             $this->local = $game->local ?? '';
             $this->casa_fora = $game->casa_fora;
             $this->competicao = $game->competicao ?? '';
@@ -57,6 +59,9 @@ class GameForm extends Component
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function rules(): array
     {
         return [
@@ -66,14 +71,14 @@ class GameForm extends Component
             'local' => ['nullable', 'string', 'max:255'],
             'casa_fora' => ['required', 'in:casa,fora'],
             'competicao' => ['nullable', 'string', 'max:255'],
-            'jornada' => ['nullable', 'string', 'max:50'],
+            'jornada' => ['nullable', 'integer', 'min:1', 'max:50'],
             'estado' => ['required', 'in:agendado,terminado,adiado,cancelado'],
             'pontos_casa' => ['nullable', 'integer', 'min:0', 'max:300'],
             'pontos_fora' => ['nullable', 'integer', 'min:0', 'max:300'],
         ];
     }
 
-    public function save()
+    public function save(): mixed
     {
         $validated = $this->validate();
         $validated['data_hora'] = Carbon::parse($validated['data_hora']);
@@ -94,7 +99,7 @@ class GameForm extends Component
         return $this->redirectRoute('admin.games.index', navigate: true);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.admin.games.form', [
             'teams' => Team::orderBy('ordem')->orderBy('nome')->get(),

@@ -3,7 +3,8 @@
 namespace App\Livewire\Site;
 
 use App\Models\Album;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\View as ViewFacade;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -17,9 +18,9 @@ class AlbumShow extends Component
         $this->album = $album->load(['photos', 'team']);
     }
 
-    public function render()
+    public function render(): View
     {
-        return View::make('livewire.site.album-show')
+        return ViewFacade::make('livewire.site.album-show')
             ->title($this->album->titulo.' - '.config('app.name'));
     }
 }

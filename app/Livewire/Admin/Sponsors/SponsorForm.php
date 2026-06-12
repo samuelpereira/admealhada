@@ -5,9 +5,11 @@ namespace App\Livewire\Admin\Sponsors;
 use App\Livewire\Concerns\HandlesImageUpload;
 use App\Models\Sponsor;
 use Flux\Flux;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
 #[Layout('components.layouts.admin')]
@@ -26,6 +28,7 @@ class SponsorForm extends Component
 
     public bool $ativo = true;
 
+    /** @var TemporaryUploadedFile|null */
     public $logo = null;
 
     public ?string $logoAtual = null;
@@ -42,6 +45,9 @@ class SponsorForm extends Component
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function rules(): array
     {
         return [
@@ -67,7 +73,7 @@ class SponsorForm extends Component
         }
     }
 
-    public function save()
+    public function save(): mixed
     {
         $validated = $this->validate();
 
@@ -94,7 +100,7 @@ class SponsorForm extends Component
         return $this->redirectRoute('admin.sponsors.index', navigate: true);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.admin.sponsors.form');
     }

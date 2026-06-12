@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Sports;
 use App\Livewire\Concerns\GeneratesSlugs;
 use App\Models\Sport;
 use Flux\Flux;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -33,6 +34,9 @@ class SportForm extends Component
         }
     }
 
+    /**
+     * @return array<string, mixed>
+     */
     protected function rules(): array
     {
         return [
@@ -42,7 +46,7 @@ class SportForm extends Component
         ];
     }
 
-    public function save()
+    public function save(): mixed
     {
         $data = $this->validate();
         $data['slug'] = $this->uniqueSlug($this->nome, 'sports', $this->sport?->id);
@@ -58,7 +62,7 @@ class SportForm extends Component
         return $this->redirectRoute('admin.sports.index', navigate: true);
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.admin.sports.form');
     }

@@ -3,7 +3,8 @@
 namespace App\Livewire\Site;
 
 use App\Models\News;
-use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\View as ViewFacade;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
@@ -19,9 +20,9 @@ class NewsShow extends Component
         $this->news = $news;
     }
 
-    public function render()
+    public function render(): View
     {
-        return View::make('livewire.site.news-show', [
+        return ViewFacade::make('livewire.site.news-show', [
             'relacionadas' => News::query()
                 ->publicadas()
                 ->where('id', '!=', $this->news->id)

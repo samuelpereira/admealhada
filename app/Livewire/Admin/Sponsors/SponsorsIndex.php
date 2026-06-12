@@ -5,6 +5,7 @@ namespace App\Livewire\Admin\Sponsors;
 use App\Models\Sponsor;
 use Flux\Flux;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Component;
@@ -31,7 +32,7 @@ class SponsorsIndex extends Component
         Flux::toast(variant: 'success', text: 'Patrocinador eliminado.');
     }
 
-    public function render()
+    public function render(): View
     {
         return view('livewire.admin.sponsors.index', [
             'sponsors' => Sponsor::query()->orderBy('ordem')->orderBy('nome')->get(),

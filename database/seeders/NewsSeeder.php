@@ -28,7 +28,9 @@ class NewsSeeder extends Seeder
         ];
 
         foreach ($destaques as $data) {
-            $corpo = collect(fake()->paragraphs(5))
+            $paragraphs = fake()->paragraphs(5);
+            $paragraphs = is_array($paragraphs) ? $paragraphs : [$paragraphs];
+            $corpo = collect($paragraphs)
                 ->map(fn ($p) => '<p>'.$p.'</p>')
                 ->implode("\n");
 

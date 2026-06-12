@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Database\Factories\GameFactory;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,8 +10,25 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Carbon;
 
+/**
+ * @property int $id
+ * @property int $team_id
+ * @property string|null $fpb_id
+ * @property string $adversario
+ * @property Carbon $data_hora
+ * @property string|null $local
+ * @property string $casa_fora
+ * @property string|null $competicao
+ * @property int|null $jornada
+ * @property int|null $pontos_casa
+ * @property int|null $pontos_fora
+ * @property string $estado
+ *
+ * @use HasFactory<GameFactory>
+ */
 class Game extends Model
 {
+    /** @use HasFactory<GameFactory> */
     use HasFactory;
 
     protected $fillable = [
@@ -34,16 +52,25 @@ class Game extends Model
         ];
     }
 
+    /** @return BelongsTo<Team, $this> */
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }
 
+    /**
+     * @param  Builder<Game>  $query
+     * @return Builder<Game>
+     */
     public function scopeProximos(Builder $query): Builder
     {
         return $query->where('data_hora', '>=', now()->startOfDay())->orderBy('data_hora');
     }
 
+    /**
+     * @param  Builder<Game>  $query
+     * @return Builder<Game>
+     */
     public function scopeResultados(Builder $query): Builder
     {
         return $query->where('data_hora', '<', now()->startOfDay())->orderByDesc('data_hora');
@@ -87,14 +114,21 @@ class Game extends Model
             ->map(fn ($data) => self::epocaFromDate(Carbon::parse($data)))
             ->unique();
 
-        return collect($predefinidas)
+        /** @var list<string> $epocas */
+        $epocas = collect($predefinidas)
             ->merge($dasBd)
             ->unique()
             ->sort()
             ->values()
             ->all();
+
+        return $epocas;
     }
 
+    /**
+     * @param  Builder<Game>  $query
+     * @return Builder<Game>
+     */
     public function scopeEpoca(Builder $query, string $epoca): Builder
     {
         if ($epoca === '' || ! preg_match('/^(\d{4})\/(\d{4})$/', $epoca, $partes)) {
@@ -132,9 +166,6 @@ class Game extends Model
         return self::competicaoLabelFrom($this->competicao);
     }
 
-    /**
-     * @param  non-empty-string  $competicao
-     */
     public static function competicaoLabelFrom(?string $competicao): ?string
     {
         if (! $competicao) {
@@ -180,6 +211,10 @@ class Game extends Model
         return 'comp-'.md5($competicao);
     }
 
+    /**
+     * @param  Builder<Game>  $query
+     * @return Builder<Game>
+     */
     public function scopeCompeticaoFilter(Builder $query, string $filter): Builder
     {
         if ($filter === '') {
