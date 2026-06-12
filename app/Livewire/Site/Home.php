@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Livewire\Site;
+
+use App\Models\Game;
+use App\Models\News;
+use App\Models\Sponsor;
+use App\Models\Sport;
+use App\Models\Team;
+use Illuminate\Support\Facades\View;
+use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
+use Livewire\Component;
+
+#[Layout('components.layouts.site')]
+#[Title('Início')]
+class Home extends Component
+{
+    public function render()
+    {
+        return View::make('livewire.site.home', [
+            'proximosJogos' => Game::query()->with('team')->proximos()->take(4)->get(),
+            'ultimosResultados' => Game::query()->with('team')->resultados()->take(4)->get(),
+            'noticias' => News::query()->publicadas()->take(3)->get(),
+            'destaque' => News::query()->publicadas()->where('destaque', true)->first()
+                ?? News::query()->publicadas()->first(),
+            'equipas' => Team::query()->orderBy('ordem')->get(),
+            'modalidades' => Sport::query()->where('ativo', true)->orderBy('nome')->get(),
+            'patrocinadores' => Sponsor::query()->ativos()->get(),
+        ]);
+    }
+}
