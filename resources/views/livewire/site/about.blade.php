@@ -73,17 +73,57 @@
         </div>
     </section>
 
-    {{-- Modalidades --}}
-    <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <x-site.section-heading title="Modalidades" subtitle="Por agora dedicamo-nos ao basquetebol, mas o clube está aberto ao crescimento." />
-        <div class="rounded-2xl border border-brand-200 bg-brand-50 p-8 dark:border-brand-500/30 dark:bg-brand-500/10">
-            <div class="flex items-center gap-4">
-                <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-brand-600 text-white">
-                    <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3v18M5.6 5.6c3 2.5 3 10.3 0 12.8M18.4 5.6c-3 2.5-3 10.3 0 12.8" /></svg>
+    {{-- Órgãos sociais --}}
+    @if ($orgaosSociais->isNotEmpty())
+        <section class="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
+                <x-site.section-heading title="Órgãos Sociais" subtitle="A estrutura de governação do clube." />
+
+                <nav class="mb-10 flex flex-wrap gap-3">
+                    @foreach ($categorias as $slug => $label)
+                        @if ($orgaosSociais->has($slug))
+                            <a href="#{{ $slug }}" class="rounded-full border border-line bg-surface-2 px-4 py-2 text-sm font-semibold text-ink transition hover:border-brand-400 hover:text-brand-700 dark:hover:text-brand-300">
+                                {{ $label }}
+                            </a>
+                        @endif
+                    @endforeach
+                </nav>
+
+                <div class="grid gap-10 lg:grid-cols-3">
+                    @foreach ($categorias as $slug => $label)
+                        @if ($orgaosSociais->has($slug))
+                            <div id="{{ $slug }}" class="scroll-mt-24">
+                                <h3 class="flex items-center gap-2 text-lg font-extrabold text-ink">
+                                    <span class="h-5 w-1 rounded-full bg-brand-600"></span>
+                                    {{ $label }}
+                                </h3>
+                                <ul class="mt-4 divide-y divide-line rounded-xl border border-line bg-surface-2">
+                                    @foreach ($orgaosSociais[$slug] as $membro)
+                                        <li class="flex items-baseline justify-between gap-4 px-5 py-4">
+                                            <span class="text-sm font-semibold text-brand-700 dark:text-brand-300">{{ $membro->cargo }}</span>
+                                            <span class="text-sm text-ink">{{ $membro->nome }}</span>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+                    @endforeach
                 </div>
-                <div>
-                    <h3 class="text-xl font-extrabold text-ink">Basquetebol</h3>
-                    <p class="text-sm text-body">Escalões de formação (Sub-10 a Sub-16, masculinos e femininos) e equipa sénior masculina na CN2.</p>
+        </section>
+    @endif
+
+    {{-- Modalidades --}}
+    <section class="bg-surface py-14">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <x-site.section-heading title="Modalidades" subtitle="Por agora dedicamo-nos ao basquetebol, mas o clube está aberto ao crescimento." />
+            <div class="rounded-2xl border border-brand-200 bg-brand-50 p-8 dark:border-brand-500/30 dark:bg-brand-500/10">
+                <div class="flex items-center gap-4">
+                    <div class="flex h-14 w-14 items-center justify-center rounded-xl bg-brand-600 text-white">
+                        <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3v18M5.6 5.6c3 2.5 3 10.3 0 12.8M18.4 5.6c-3 2.5-3 10.3 0 12.8" /></svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-extrabold text-ink">Basquetebol</h3>
+                        <p class="text-sm text-body">Escalões de formação (Sub-10 a Sub-16, masculinos e femininos) e equipa sénior masculina na CN2.</p>
+                    </div>
                 </div>
             </div>
         </div>

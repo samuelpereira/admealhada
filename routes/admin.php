@@ -9,6 +9,8 @@ use App\Livewire\Admin\News\NewsForm;
 use App\Livewire\Admin\News\NewsIndex;
 use App\Livewire\Admin\Players\PlayerForm;
 use App\Livewire\Admin\Players\PlayersIndex;
+use App\Livewire\Admin\SocialBodies\SocialBodiesIndex;
+use App\Livewire\Admin\SocialBodies\SocialBodyForm;
 use App\Livewire\Admin\Sponsors\SponsorForm;
 use App\Livewire\Admin\Sponsors\SponsorsIndex;
 use App\Livewire\Admin\Sports\SportForm;
@@ -50,4 +52,8 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::livewire('patrocinadores', SponsorsIndex::class)->name('sponsors.index');
         Route::livewire('patrocinadores/novo', SponsorForm::class)->name('sponsors.create');
         Route::livewire('patrocinadores/{sponsor}/editar', SponsorForm::class)->name('sponsors.edit');
+
+        Route::livewire('orgaos-sociais', SocialBodiesIndex::class)->name('social-bodies.index');
+        Route::livewire('orgaos-sociais/novo', SocialBodyForm::class)->name('social-bodies.create');
+        Route::livewire('orgaos-sociais/{socialBody}/editar', SocialBodyForm::class)->name('social-bodies.edit');
     });

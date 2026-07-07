@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
             NewsSeeder::class,
             GallerySeeder::class,
             SponsorSeeder::class,
+            SocialBodySeeder::class,
         ]);
     }
 }

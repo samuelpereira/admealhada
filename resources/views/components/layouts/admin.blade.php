@@ -33,6 +33,9 @@
                     <flux:sidebar.item icon="building-storefront" :href="route('admin.sponsors.index')" :current="request()->routeIs('admin.sponsors.*')" wire:navigate>
                         Patrocinadores
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="users" :href="route('admin.social-bodies.index')" :current="request()->routeIs('admin.social-bodies.*')" wire:navigate>
+                        Órgãos sociais
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
 
                 <flux:sidebar.group :heading="__('Competição')" class="grid">
