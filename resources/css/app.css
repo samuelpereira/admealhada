@@ -93,7 +93,11 @@
 }
 
 .animate-sponsors-marquee {
-    animation: sponsors-marquee 40s linear infinite;
+    animation: sponsors-marquee 60s linear infinite;
+}
+
+.sponsors-marquee-track:hover .animate-sponsors-marquee {
+    animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
