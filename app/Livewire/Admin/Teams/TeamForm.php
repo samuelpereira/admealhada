@@ -167,7 +167,7 @@ class TeamForm extends Component
 
             Flux::toast(variant: 'success', text: 'Equipa guardada.');
 
-            return;
+            return null;
         }
 
         $team = Team::create($data);
