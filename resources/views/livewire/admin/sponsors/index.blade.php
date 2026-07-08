@@ -9,6 +9,8 @@
                 <tr>
                     <th class="px-4 py-3">Logo</th>
                     <th class="px-4 py-3">Nome</th>
+                    <th class="px-4 py-3">Tipo</th>
+                    <th class="px-4 py-3">Equipas</th>
                     <th class="px-4 py-3">Link</th>
                     <th class="px-4 py-3">Ordem</th>
                     <th class="px-4 py-3">Estado</th>
@@ -26,6 +28,18 @@
                             </div>
                         </td>
                         <td class="px-4 py-3 font-semibold text-zinc-900 dark:text-white">{{ $sponsor->nome }}</td>
+                        <td class="px-4 py-3">
+                            <flux:badge :color="$sponsor->tipo === 'principal' ? 'blue' : 'zinc'" size="sm">
+                                {{ $sponsor->tipoLabel() }}
+                            </flux:badge>
+                        </td>
+                        <td class="px-4 py-3 text-zinc-600 dark:text-zinc-300">
+                            @if ($sponsor->teams->isNotEmpty())
+                                {{ $sponsor->teams->pluck('nome')->join(', ') }}
+                            @else
+                                <span class="text-zinc-400">—</span>
+                            @endif
+                        </td>
                         <td class="px-4 py-3">
                             @if ($sponsor->link)
                                 <a href="{{ $sponsor->link }}" target="_blank" rel="noopener noreferrer" class="text-brand-600 hover:underline dark:text-brand-300">
@@ -52,7 +66,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-4 py-10 text-center text-zinc-500">Ainda não há patrocinadores.</td>
+                        <td colspan="8" class="px-4 py-10 text-center text-zinc-500">Ainda não há patrocinadores.</td>
                     </tr>
                 @endforelse
             </tbody>

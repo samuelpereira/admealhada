@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Sponsors;
 
 use App\Livewire\Concerns\HandlesImageUpload;
 use App\Models\Sponsor;
+use App\Models\Team;
 use Flux\Flux;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
@@ -24,6 +25,11 @@ class SponsorForm extends Component
 
     public string $link = '';
 
+    public string $tipo = Sponsor::TIPO_GERAL;
+
+    /** @var array<int, int> */
+    public array $teamIds = [];
+
     public int $ordem = 0;
 
     public bool $ativo = true;
@@ -33,15 +39,27 @@ class SponsorForm extends Component
 
     public ?string $logoAtual = null;
 
+    /** @var array<string, string> */
+    public array $tipos = Sponsor::TIPOS;
+
     public function mount(?Sponsor $sponsor = null): void
     {
         if ($sponsor && $sponsor->exists) {
             $this->sponsor = $sponsor;
             $this->nome = $sponsor->nome;
             $this->link = $sponsor->link ?? '';
+            $this->tipo = $sponsor->tipo;
+            $this->teamIds = $sponsor->teams()->pluck('teams.id')->all();
             $this->ordem = $sponsor->ordem ?? 0;
             $this->ativo = $sponsor->ativo;
             $this->logoAtual = $sponsor->logo;
+        }
+    }
+
+    public function updatedTipo(string $value): void
+    {
+        if ($value === Sponsor::TIPO_GERAL) {
+            $this->teamIds = [];
         }
     }
 
@@ -50,13 +68,21 @@ class SponsorForm extends Component
      */
     protected function rules(): array
     {
-        return [
+        $rules = [
             'nome' => ['required', 'string', 'max:255'],
             'link' => ['required', 'url', 'max:255'],
+            'tipo' => ['required', 'string', 'in:'.implode(',', array_keys(Sponsor::TIPOS))],
             'ordem' => ['integer', 'min:0'],
             'ativo' => ['boolean'],
             'logo' => [$this->sponsor || $this->logoAtual ? 'nullable' : 'required', 'image', 'max:4096'],
         ];
+
+        if ($this->tipo === Sponsor::TIPO_PRINCIPAL) {
+            $rules['teamIds'] = ['required', 'array', 'min:1'];
+            $rules['teamIds.*'] = ['integer', 'exists:teams,id'];
+        }
+
+        return $rules;
     }
 
     public function removerLogo(): void
@@ -80,6 +106,7 @@ class SponsorForm extends Component
         $data = [
             'nome' => $validated['nome'],
             'link' => $validated['link'],
+            'tipo' => $validated['tipo'],
             'ordem' => $validated['ordem'],
             'ativo' => $validated['ativo'],
         ];
@@ -91,9 +118,12 @@ class SponsorForm extends Component
 
         if ($this->sponsor) {
             $this->sponsor->update($data);
+            $sponsor = $this->sponsor;
         } else {
-            Sponsor::create($data);
+            $sponsor = Sponsor::create($data);
         }
+
+        $sponsor->teams()->sync($this->tipo === Sponsor::TIPO_PRINCIPAL ? $this->teamIds : []);
 
         Flux::toast(variant: 'success', text: 'Patrocinador guardado.');
 
@@ -102,6 +132,8 @@ class SponsorForm extends Component
 
     public function render(): View
     {
-        return view('livewire.admin.sponsors.form');
+        return view('livewire.admin.sponsors.form', [
+            'equipas' => Team::query()->orderBy('ordem')->orderBy('nome')->get(),
+        ]);
     }
 }

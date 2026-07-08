@@ -27,6 +27,7 @@
         $navLinks = [
             ['route' => 'clube', 'label' => 'Clube'],
             ['route' => 'equipas', 'label' => 'Equipas'],
+            ['route' => 'patrocinadores', 'label' => 'Patrocinadores'],
             ['route' => 'calendario', 'label' => 'Calendário'],
             ['route' => 'noticias', 'label' => 'Notícias'],
             ['route' => 'galeria', 'label' => 'Galeria'],
@@ -90,7 +91,11 @@
         {{ $slot }}
     </main>
 
-    <footer class="mt-16 bg-brand-950 text-brand-100">
+    @unless (request()->routeIs('patrocinadores'))
+        <x-site.sponsors-carousel :sponsors="$patrocinadores" />
+    @endunless
+
+    <footer @class(['bg-brand-950 text-brand-100', 'mt-16' => request()->routeIs('patrocinadores')])>
         <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
             <div class="grid gap-10 md:grid-cols-2 lg:grid-cols-4">
                 <div>

@@ -15,7 +15,7 @@ class TeamShow extends Component
 
     public function mount(Team $team): void
     {
-        $this->team = $team->load(['sport', 'players']);
+        $this->team = $team->load(['sport', 'players', 'sponsors']);
     }
 
     public function render(): View

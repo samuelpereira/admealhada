@@ -92,6 +92,17 @@
                         </div>
                     @endif
                 </div>
+
+                @if ($team->sponsors->isNotEmpty())
+                    <div>
+                        <h2 class="mb-4 text-lg font-bold text-ink">Patrocinadores</h2>
+                        <div class="grid grid-cols-3 gap-3">
+                            @foreach ($team->sponsors as $sponsor)
+                                <x-site.sponsor-card :sponsor="$sponsor" />
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
     </section>

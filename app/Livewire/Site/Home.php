@@ -4,7 +4,6 @@ namespace App\Livewire\Site;
 
 use App\Models\Game;
 use App\Models\News;
-use App\Models\Sponsor;
 use App\Models\Sport;
 use App\Models\Team;
 use Illuminate\View\View;
@@ -26,7 +25,6 @@ class Home extends Component
                 ?? News::query()->publicadas()->first(),
             'equipas' => Team::query()->orderBy('ordem')->get(),
             'modalidades' => Sport::query()->where('ativo', true)->orderBy('nome')->get(),
-            'patrocinadores' => Sponsor::query()->ativos()->get(),
         ]);
     }
 }

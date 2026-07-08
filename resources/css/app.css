@@ -84,25 +84,38 @@
 
 @keyframes sponsors-marquee {
     from {
-        transform: translateX(0);
+        transform: translate3d(0, 0, 0);
     }
 
     to {
-        transform: translateX(-50%);
+        transform: translate3d(-50%, 0, 0);
     }
 }
 
-.animate-sponsors-marquee {
+.sponsors-marquee {
     animation: sponsors-marquee 60s linear infinite;
+    will-change: transform;
+    backface-visibility: hidden;
 }
 
-.sponsors-marquee-track:hover .animate-sponsors-marquee {
+.sponsors-marquee-track:hover .sponsors-marquee {
     animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .animate-sponsors-marquee {
+    .sponsors-marquee {
         animation: none;
+        flex-wrap: wrap;
+        width: 100%;
+        max-width: 80rem;
+        margin-inline: auto;
+        justify-content: center;
+        gap: 1rem;
+        padding-inline: 1rem;
+    }
+
+    .sponsors-marquee-item {
+        pointer-events: auto !important;
     }
 }
 

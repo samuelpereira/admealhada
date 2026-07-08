@@ -125,9 +125,6 @@
         </section>
     @endif
 
-    {{-- Patrocinadores --}}
-    <x-site.sponsors-carousel :sponsors="$patrocinadores" />
-
     {{-- CTA --}}
     <section class="bg-gradient-to-r from-brand-700 to-brand-900">
         <div class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-4 py-12 text-center sm:px-6 lg:flex-row lg:px-8 lg:text-left">

@@ -6,6 +6,7 @@ use Database\Factories\TeamFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -80,6 +81,23 @@ class Team extends Model
     public function albums(): HasMany
     {
         return $this->hasMany(Album::class);
+    }
+
+    /** @return BelongsToMany<Sponsor, $this> */
+    public function sponsors(): BelongsToMany
+    {
+        return $this->belongsToMany(Sponsor::class)
+            ->where('sponsors.tipo', Sponsor::TIPO_PRINCIPAL)
+            ->where('sponsors.ativo', true)
+            ->whereNotNull('sponsors.logo')
+            ->orderBy('sponsors.ordem')
+            ->orderBy('sponsors.nome');
+    }
+
+    /** @return BelongsToMany<Sponsor, $this> */
+    public function allSponsors(): BelongsToMany
+    {
+        return $this->belongsToMany(Sponsor::class)->orderBy('sponsors.ordem');
     }
 
     public function generoLabel(): string

@@ -9,6 +9,28 @@
                 <flux:input wire:model="nome" label="Nome" required autofocus />
                 <flux:input wire:model="link" label="Link" type="url" placeholder="https://..." required
                     description="Abre num novo separador no site público." />
+
+                <flux:select wire:model.live="tipo" label="Tipo" required>
+                    @foreach ($tipos as $valor => $label)
+                        <flux:select.option value="{{ $valor }}">{{ $label }}</flux:select.option>
+                    @endforeach
+                </flux:select>
+
+                @if ($tipo === 'principal')
+                    <div>
+                        <flux:label>Equipas</flux:label>
+                        <p class="mb-3 text-sm text-zinc-500">Seleciona as equipas associadas a este patrocinador principal.</p>
+                        <div class="grid gap-2 sm:grid-cols-2">
+                            @foreach ($equipas as $equipa)
+                                <flux:checkbox wire:model="teamIds" value="{{ $equipa->id }}" :label="$equipa->nome" />
+                            @endforeach
+                        </div>
+                        @error('teamIds')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+                @endif
+
                 <flux:input wire:model="ordem" label="Ordem" type="number" min="0"
                     description="Patrocinadores com ordem mais baixa aparecem primeiro." />
                 <flux:checkbox wire:model="ativo" label="Ativo no site" />
