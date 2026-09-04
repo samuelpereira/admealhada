@@ -2,16 +2,6 @@
     <x-admin.header title="Dashboard" subtitle="Visão geral do clube" />
 
     <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        @php
-            $cards = [
-                ['label' => 'Notícias', 'value' => $totals['news'], 'icon' => 'newspaper', 'route' => 'admin.news.index'],
-                ['label' => 'Equipas', 'value' => $totals['teams'], 'icon' => 'user-group', 'route' => 'admin.teams.index'],
-                ['label' => 'Jogadores', 'value' => $totals['players'], 'icon' => 'identification', 'route' => 'admin.players.index'],
-                ['label' => 'Jogos', 'value' => $totals['games'], 'icon' => 'calendar-days', 'route' => 'admin.games.index'],
-                ['label' => 'Galerias', 'value' => $totals['albums'], 'icon' => 'photo', 'route' => 'admin.albums.index'],
-            ];
-        @endphp
-
         @foreach ($cards as $card)
             <a href="{{ route($card['route']) }}" wire:navigate
                class="group rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition hover:border-brand-400 hover:shadow dark:border-zinc-700 dark:bg-zinc-900">

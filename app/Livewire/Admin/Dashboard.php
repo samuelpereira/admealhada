@@ -20,12 +20,12 @@ class Dashboard extends Component
     public function render(): View
     {
         return view('livewire.admin.dashboard', [
-            'totals' => [
-                'news' => News::count(),
-                'teams' => Team::count(),
-                'players' => Player::count(),
-                'games' => Game::count(),
-                'albums' => Album::count(),
+            'cards' => [
+                ['label' => 'Notícias', 'value' => News::count(), 'icon' => 'newspaper', 'route' => 'admin.news.index'],
+                ['label' => 'Equipas', 'value' => Team::count(), 'icon' => 'user-group', 'route' => 'admin.teams.index'],
+                ['label' => 'Jogadores', 'value' => Player::count(), 'icon' => 'identification', 'route' => 'admin.players.index'],
+                ['label' => 'Jogos', 'value' => Game::count(), 'icon' => 'calendar-days', 'route' => 'admin.games.index'],
+                ['label' => 'Galerias', 'value' => Album::count(), 'icon' => 'photo', 'route' => 'admin.albums.index'],
             ],
             'proximosJogos' => Game::query()->with('team')->proximos()->take(5)->get(),
             'rascunhos' => News::query()

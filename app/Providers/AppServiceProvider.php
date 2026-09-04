@@ -6,6 +6,7 @@ use App\Models\News;
 use App\Models\Sponsor;
 use App\Models\Team;
 use Carbon\CarbonImmutable;
+use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -38,6 +39,17 @@ class AppServiceProvider extends ServiceProvider
     protected function configureViewComposers(): void
     {
         View::composer('components.layouts.site', $this->composeSiteLayout(...));
+        View::composer('layouts.auth.split', $this->composeAuthSplit(...));
+    }
+
+    protected function composeAuthSplit(IlluminateView $view): void
+    {
+        [$message, $author] = str(Inspiring::quotes()->random())->explode('-');
+
+        $view->with([
+            'inspiringQuote' => trim((string) $message),
+            'inspiringAuthor' => trim((string) $author),
+        ]);
     }
 
     protected function composeSiteLayout(IlluminateView $view): void

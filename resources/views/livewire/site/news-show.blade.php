@@ -1,34 +1,5 @@
 <div>
     @push('structured-data')
-        @php
-            $newsImage = filled($news->capa)
-                ? url(\Illuminate\Support\Facades\Storage::url($news->capa))
-                : Vite::asset('resources/images/hero-hand-ball.png');
-
-            $newsSchema = [
-                '@context' => 'https://schema.org',
-                '@type' => 'NewsArticle',
-                'headline' => $news->titulo,
-                'description' => $news->resumo ?: \Illuminate\Support\Str::limit(trim(strip_tags((string) $news->corpo)), 155),
-                'image' => [$newsImage],
-                'datePublished' => $news->publicado_em?->toIso8601String(),
-                'dateModified' => $news->updated_at?->toIso8601String(),
-                'author' => [
-                    '@type' => 'Organization',
-                    'name' => config('site.contact.name'),
-                ],
-                'publisher' => [
-                    '@type' => 'Organization',
-                    'name' => config('site.contact.name'),
-                    'logo' => [
-                        '@type' => 'ImageObject',
-                        'url' => Vite::asset('resources/images/logo.png'),
-                    ],
-                ],
-                'mainEntityOfPage' => url()->current(),
-            ];
-        @endphp
-
         <script type="application/ld+json">@json($newsSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)</script>
     @endpush
 

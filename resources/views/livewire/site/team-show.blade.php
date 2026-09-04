@@ -1,26 +1,5 @@
 <div>
     @push('structured-data')
-        @php
-            $teamImage = filled($team->foto)
-                ? url(\Illuminate\Support\Facades\Storage::url($team->foto))
-                : Vite::asset('resources/images/hero-hand-ball.png');
-
-            $teamSchema = [
-                '@context' => 'https://schema.org',
-                '@type' => 'SportsTeam',
-                'name' => $team->nome,
-                'sport' => 'Basketball',
-                'url' => url()->current(),
-                'image' => $teamImage,
-                'description' => $team->descricao ?: 'Equipa de basquetebol da AD Mealhada.',
-                'memberOf' => [
-                    '@type' => 'SportsOrganization',
-                    'name' => config('site.contact.name'),
-                    'url' => url('/'),
-                ],
-            ];
-        @endphp
-
         <script type="application/ld+json">@json($teamSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)</script>
     @endpush
 

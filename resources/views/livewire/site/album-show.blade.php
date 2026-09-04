@@ -1,20 +1,4 @@
 <div>
-    @php
-        $gradients = [
-            'from-brand-500 to-brand-800',
-            'from-brand-700 to-brand-950',
-            'from-violet-500 to-brand-800',
-            'from-fuchsia-600 to-brand-900',
-            'from-brand-600 to-indigo-800',
-            'from-purple-600 to-brand-950',
-        ];
-        $photosData = $album->photos->map(fn ($p) => [
-            'src' => $p->caminho ? (\Illuminate\Support\Str::startsWith($p->caminho, ['http://', 'https://', '/']) ? $p->caminho : \Illuminate\Support\Facades\Storage::url($p->caminho)) : null,
-            'legenda' => $p->legenda,
-            'gradient' => $gradients[$p->id % count($gradients)],
-        ])->values();
-    @endphp
-
     <x-site.page-header :title="$album->titulo" :subtitle="$album->descricao">
         <div class="mt-4 flex flex-wrap items-center gap-3 text-sm text-brand-200">
             @if ($album->data)<span>{{ $album->data->translatedFormat('d \d\e F \d\e Y') }}</span>@endif

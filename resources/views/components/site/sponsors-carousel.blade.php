@@ -1,16 +1,4 @@
-@props([
-    'sponsors',
-])
-
 @if ($sponsors->isNotEmpty())
-    @php
-        $track = collect();
-
-        while ($track->count() < 12) {
-            $track = $track->concat($sponsors);
-        }
-    @endphp
-
     <section class="mt-16 border-y border-line bg-surface/90 py-14">
         <div class="site-shell">
             <x-site.section-heading title="Patrocinadores" subtitle="Empresas e entidades que apoiam o clube." />

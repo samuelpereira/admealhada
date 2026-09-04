@@ -1,16 +1,3 @@
-@props([
-    'model',
-    'label' => null,
-    'file' => null,
-    'current' => null,
-    'remove' => null,
-    'hint' => null,
-])
-
-@php
-    $previewUrl = $file ? $file->temporaryUrl() : ($current ? \Illuminate\Support\Facades\Storage::url($current) : null);
-@endphp
-
 <flux:field>
     @if ($label)
         <flux:label>{{ $label }}</flux:label>

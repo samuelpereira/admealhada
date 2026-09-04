@@ -146,6 +146,16 @@ class Game extends Model
         return $this->casa_fora === 'casa';
     }
 
+    public function estadoColor(): string
+    {
+        return match ($this->estado) {
+            'terminado' => 'green',
+            'agendado' => 'blue',
+            'adiado' => 'amber',
+            default => 'zinc',
+        };
+    }
+
     public function vitoria(): ?bool
     {
         if ($this->estado !== 'terminado' || $this->pontos_casa === null || $this->pontos_fora === null) {

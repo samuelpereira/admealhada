@@ -53,15 +53,7 @@
                             @endif
                         </td>
                         <td class="px-4 py-3">
-                            @php
-                                $cor = match ($game->estado) {
-                                    'terminado' => 'green',
-                                    'agendado' => 'blue',
-                                    'adiado' => 'amber',
-                                    default => 'zinc',
-                                };
-                            @endphp
-                            <flux:badge :color="$cor" size="sm">{{ ucfirst($game->estado) }}</flux:badge>
+                            <flux:badge :color="$game->estadoColor()" size="sm">{{ ucfirst($game->estado) }}</flux:badge>
                         </td>
                         <td class="px-4 py-3">
                             <div class="flex items-center justify-end gap-2">
