@@ -12,6 +12,6 @@ Follow Laravel and Livewire conventions. Do not invent shortcuts that fight the 
 - Prefer Eloquent scopes, model methods, and form requests over fat controllers or Blade condition trees.
 - Resolve storage/public URLs in PHP (`App\Support\MediaUrl`), not with facades inlined in views.
 - Match existing patterns: invokable controllers for single actions, Livewire for pages, Pint + PHPStan level 7.
-- Run container CLI as `devuser` (`docker compose exec -u devuser`) so cache files are not owned by root.
+- Run container CLI and Laravel Boost MCP as `devuser` (`docker compose exec -u devuser`) so cache files are not owned by root. The Boost MCP is wired through Docker in `.cursor/mcp.json`; the app container must be running.
 - Do not assume product or visual decisions. Ask first.
 ---
