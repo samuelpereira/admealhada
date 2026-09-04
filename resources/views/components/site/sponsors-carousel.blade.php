@@ -11,9 +11,9 @@
         }
     @endphp
 
-    <section class="mt-16 border-y border-line bg-surface py-14">
-        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <x-site.section-heading title="Patrocinadores" subtitle="Empresas e entidades que apoiam o nosso clube." />
+    <section class="mt-16 border-y border-line bg-surface/90 py-14">
+        <div class="site-shell">
+            <x-site.section-heading title="Patrocinadores" subtitle="Empresas e entidades que apoiam o clube." />
         </div>
 
         <div class="sponsors-marquee-track relative mt-2 overflow-hidden">
@@ -34,13 +34,19 @@
                             ])
                             @if ($pass === 2) aria-hidden="true" tabindex="-1" @endif
                         >
-                            <img
-                                src="{{ \Illuminate\Support\Facades\Storage::url($sponsor->logo) }}"
-                                alt="{{ $sponsor->nome }}"
-                                class="max-h-16 max-w-full object-contain opacity-70 grayscale transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
-                                loading="lazy"
-                                decoding="async"
-                            >
+                            @if ($sponsor->logo)
+                                <img
+                                    src="{{ \Illuminate\Support\Facades\Storage::url($sponsor->logo) }}"
+                                    alt="{{ $sponsor->nome }}"
+                                    class="max-h-16 max-w-full object-contain opacity-75 grayscale transition duration-300 group-hover:opacity-100 group-hover:grayscale-0"
+                                    loading="lazy"
+                                    decoding="async"
+                                >
+                            @else
+                                <span class="text-center text-[11px] font-black uppercase leading-tight text-brand-700 opacity-75 transition group-hover:text-rim-600 group-hover:opacity-100 dark:text-brand-100 dark:group-hover:text-rim-200">
+                                    {{ $sponsor->nome }}
+                                </span>
+                            @endif
                         </a>
                     @endforeach
                 @endforeach

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SitemapController;
 use App\Livewire\Site\About;
 use App\Livewire\Site\AlbumShow;
 use App\Livewire\Site\Contact;
@@ -12,6 +13,8 @@ use App\Livewire\Site\Sponsors;
 use App\Livewire\Site\Teams;
 use App\Livewire\Site\TeamShow;
 use Illuminate\Support\Facades\Route;
+
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 
 Route::get('/', Home::class)->name('home');
 Route::get('/clube', About::class)->name('clube');

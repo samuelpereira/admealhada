@@ -4,6 +4,7 @@ namespace App\Livewire\Site;
 
 use App\Models\Player;
 use App\Models\SocialBody;
+use App\Models\Sponsor;
 use App\Models\Team;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
@@ -23,7 +24,8 @@ class About extends Component
 
         return view('livewire.site.about', [
             'totalEquipas' => Team::count(),
-            'totalAtletas' => Player::where('papel', 'jogador')->count(),
+            'totalJogadores' => Player::where('papel', 'jogador')->count(),
+            'totalPatrocinadores' => Sponsor::where('ativo', true)->count(),
             'orgaosSociais' => $orgaosSociais,
             'categorias' => SocialBody::CATEGORIAS,
         ]);

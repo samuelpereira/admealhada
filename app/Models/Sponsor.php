@@ -49,7 +49,6 @@ class Sponsor extends Model
     {
         return $query
             ->where('ativo', true)
-            ->whereNotNull('logo')
             ->orderBy('ordem')
             ->orderBy('nome');
     }

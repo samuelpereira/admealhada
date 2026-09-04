@@ -2,8 +2,11 @@
 
 namespace App\Livewire\Site;
 
+use App\Models\Album;
 use App\Models\Game;
 use App\Models\News;
+use App\Models\Player;
+use App\Models\Sponsor;
 use App\Models\Sport;
 use App\Models\Team;
 use Illuminate\View\View;
@@ -25,6 +28,10 @@ class Home extends Component
                 ?? News::query()->publicadas()->first(),
             'equipas' => Team::query()->orderBy('ordem')->get(),
             'modalidades' => Sport::query()->where('ativo', true)->orderBy('nome')->get(),
+            'albuns' => Album::query()->withCount('photos')->latest('data')->take(4)->get(),
+            'totalEquipas' => Team::query()->count(),
+            'totalJogadores' => Player::query()->where('papel', 'jogador')->count(),
+            'totalPatrocinadores' => Sponsor::query()->where('ativo', true)->count(),
         ]);
     }
 }

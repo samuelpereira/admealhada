@@ -12,6 +12,7 @@ export default defineConfig({
                 'resources/css/app.css',
                 'resources/js/app.js',
                 'resources/images/logo.png',
+                'resources/images/hero-hand-ball.png',
             ],
             refresh: true,
             fonts: [

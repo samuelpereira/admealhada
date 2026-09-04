@@ -20,7 +20,7 @@
             @if ($album->data)<span>{{ $album->data->translatedFormat('d \d\e F \d\e Y') }}</span>@endif
             @if ($album->team)<span>·</span><a href="{{ route('equipas.show', $album->team) }}" class="hover:text-white">{{ $album->team->nome }}</a>@endif
         </div>
-        <a href="{{ route('galeria') }}" class="mt-6 inline-flex items-center gap-1 text-sm font-semibold text-brand-200 hover:text-white">
+        <a href="{{ route('galeria') }}" class="mt-6 inline-flex min-h-10 items-center gap-1 text-sm font-black text-brand-200 hover:text-white">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>
             Voltar à galeria
         </a>
@@ -39,14 +39,14 @@
         @keydown.window.escape="close()"
         @keydown.window.arrow-right="if (open) next()"
         @keydown.window.arrow-left="if (open) prev()"
-        class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        class="site-shell py-12">
 
         @if ($album->photos->isEmpty())
-            <p class="rounded-xl border border-dashed border-line bg-surface p-8 text-center text-muted">Este álbum ainda não tem fotos.</p>
+            <p class="site-card border-dashed p-8 text-center text-muted">Este álbum ainda não tem fotos.</p>
         @else
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                 @foreach ($album->photos as $i => $photo)
-                    <button type="button" wire:key="photo-{{ $photo->id }}" @click="show({{ $i }})" class="group relative aspect-square overflow-hidden rounded-xl shadow-sm">
+                    <button type="button" wire:key="photo-{{ $photo->id }}" @click="show({{ $i }})" class="site-card group relative aspect-square">
                         <x-site.media :src="$photo->caminho" :seed="$photo->id" :icon="false" class="transition duration-300 group-hover:scale-105" />
                         <span class="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/20">
                             <svg class="h-8 w-8 text-white opacity-0 transition group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 21l-5.197-5.197" /></svg>
@@ -57,13 +57,13 @@
 
             {{-- Lightbox --}}
             <div x-show="open" x-cloak x-transition.opacity class="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4" @click.self="close()">
-                <button type="button" @click="close()" class="absolute right-4 top-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Fechar">
+                <button type="button" @click="close()" class="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-md bg-white/10 text-white hover:bg-white/20" aria-label="Fechar">
                     <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" /></svg>
                 </button>
-                <button type="button" @click="prev()" class="absolute left-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Anterior">
+                <button type="button" @click="prev()" class="absolute left-4 grid h-11 w-11 place-items-center rounded-md bg-white/10 text-white hover:bg-white/20" aria-label="Anterior">
                     <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
                 </button>
-                <button type="button" @click="next()" class="absolute right-4 rounded-full bg-white/10 p-2 text-white hover:bg-white/20" aria-label="Seguinte">
+                <button type="button" @click="next()" class="absolute right-4 grid h-11 w-11 place-items-center rounded-md bg-white/10 text-white hover:bg-white/20" aria-label="Seguinte">
                     <svg class="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" /></svg>
                 </button>
 

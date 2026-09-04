@@ -2,15 +2,15 @@
     <x-site.page-header
         eyebrow="Atualidade"
         title="Notícias e novidades"
-        subtitle="As últimas do clube, dos jogos e da formação." />
+        subtitle="As novidades, os resultados e as histórias que fazem o nosso clube." />
 
-    <section class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+    <section class="site-shell py-12">
         {{-- Filtros de categoria --}}
-        <div class="mb-8 flex flex-wrap gap-2">
+        <div class="scroll-tabs mb-8">
             <button type="button" wire:click="filtrar('')"
                 @class([
-                    'rounded-full px-4 py-1.5 text-sm font-semibold transition',
-                    'bg-brand-700 text-white' => $categoria === '',
+                    'min-h-10 shrink-0 rounded-md px-4 py-2 text-sm font-black uppercase transition',
+                    'bg-brand-700 text-white shadow-sm' => $categoria === '',
                     'bg-surface text-body ring-1 ring-line hover:bg-surface-2' => $categoria !== '',
                 ])>
                 Todas
@@ -18,8 +18,8 @@
             @foreach ($categorias as $cat)
                 <button type="button" wire:click="filtrar('{{ $cat }}')"
                     @class([
-                        'rounded-full px-4 py-1.5 text-sm font-semibold transition',
-                        'bg-brand-700 text-white' => $categoria === $cat,
+                        'min-h-10 shrink-0 rounded-md px-4 py-2 text-sm font-black uppercase transition',
+                        'bg-brand-700 text-white shadow-sm' => $categoria === $cat,
                         'bg-surface text-body ring-1 ring-line hover:bg-surface-2' => $categoria !== $cat,
                     ])>
                     {{ $cat }}
@@ -28,7 +28,7 @@
         </div>
 
         @if ($noticias->isEmpty())
-            <p class="rounded-xl border border-dashed border-line bg-surface p-8 text-center text-muted">Não há notícias nesta categoria.</p>
+            <p class="site-card border-dashed p-8 text-center text-muted">Não há notícias nesta categoria.</p>
         @else
             <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($noticias as $news)
