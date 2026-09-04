@@ -133,7 +133,7 @@ class SponsorForm extends Component
     public function render(): View
     {
         return view('livewire.admin.sponsors.form', [
-            'equipas' => Team::query()->orderBy('ordem')->orderBy('nome')->get(),
+            'equipas' => Team::query()->forAdminLists()->get(),
         ]);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\PlayerFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -42,5 +43,14 @@ class Player extends Model
     public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
+    }
+
+    /**
+     * @param  Builder<Player>  $query
+     * @return Builder<Player>
+     */
+    public function scopeOnCurrentSeasonTeam(Builder $query): Builder
+    {
+        return $query->whereRelation('team', 'season_id', Season::current()?->id);
     }
 }

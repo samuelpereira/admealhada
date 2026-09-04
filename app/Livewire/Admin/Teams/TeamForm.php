@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Teams;
 
 use App\Livewire\Concerns\GeneratesSlugs;
 use App\Livewire\Concerns\HandlesImageUpload;
+use App\Models\Season;
 use App\Models\Sport;
 use App\Models\Team;
 use App\Services\Fpb\FpbGamesImporter;
@@ -24,6 +25,8 @@ class TeamForm extends Component
     use GeneratesSlugs, HandlesImageUpload, WithFileUploads;
 
     public ?Team $team = null;
+
+    public ?int $season_id = null;
 
     public ?int $sport_id = null;
 
@@ -50,6 +53,7 @@ class TeamForm extends Component
     {
         if ($team && $team->exists) {
             $this->team = $team;
+            $this->season_id = $team->season_id;
             $this->sport_id = $team->sport_id;
             $this->nome = $team->nome;
             $this->escalao = $team->escalao ?? '';
@@ -60,6 +64,7 @@ class TeamForm extends Component
             $this->ordem = $team->ordem ?? 0;
             $this->fotoAtual = $team->foto;
         } else {
+            $this->season_id = Season::current()?->id;
             $this->sport_id = Sport::query()->where('ativo', true)->value('id') ?? Sport::query()->value('id');
         }
     }
@@ -70,6 +75,7 @@ class TeamForm extends Component
     protected function rules(): array
     {
         return [
+            'season_id' => ['required', 'exists:seasons,id'],
             'sport_id' => ['required', 'exists:sports,id'],
             'nome' => ['required', 'string', 'max:255'],
             'escalao' => ['required', 'string', 'max:50'],
@@ -149,7 +155,9 @@ class TeamForm extends Component
         $validated = $this->validate();
 
         $data = Arr::except($validated, ['foto']);
-        $data['slug'] = $this->uniqueSlug($this->nome, 'teams', $this->team?->id);
+        $data['slug'] = $this->uniqueSlug($this->nome, 'teams', $this->team?->id, 'slug', [
+            'season_id' => $this->season_id,
+        ]);
 
         if ($this->foto) {
             $this->deleteImage($this->fotoAtual);
@@ -181,6 +189,7 @@ class TeamForm extends Component
     {
         return view('livewire.admin.teams.form', [
             'sports' => Sport::orderBy('nome')->get(),
+            'epocas' => Season::query()->orderByDesc('starts_at')->get(),
         ]);
     }
 }

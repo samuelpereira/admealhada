@@ -2,7 +2,7 @@
     <x-site.page-header :title="$album->titulo" :subtitle="$album->descricao">
         <div class="mt-4 flex flex-wrap items-center gap-3 text-sm text-brand-200">
             @if ($album->data)<span>{{ $album->data->translatedFormat('d \d\e F \d\e Y') }}</span>@endif
-            @if ($album->team)<span>·</span><a href="{{ route('equipas.show', $album->team) }}" class="hover:text-white">{{ $album->team->nome }}</a>@endif
+            @if ($album->team)<span>·</span><a href="{{ $album->team->publicShowUrl() }}" class="hover:text-white">{{ $album->team->nome }}</a>@endif
         </div>
         <a href="{{ route('galeria') }}" class="mt-6 inline-flex min-h-10 items-center gap-1 text-sm font-black text-brand-200 hover:text-white">
             <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" /></svg>

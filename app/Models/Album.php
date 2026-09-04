@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\FlushesSitemapCache;
 use Database\Factories\AlbumFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -23,7 +24,7 @@ use Illuminate\Support\Carbon;
 class Album extends Model
 {
     /** @use HasFactory<AlbumFactory> */
-    use HasFactory;
+    use FlushesSitemapCache, HasFactory;
 
     protected $fillable = [
         'team_id',

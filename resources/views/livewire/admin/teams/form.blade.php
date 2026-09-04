@@ -8,6 +8,12 @@
             <flux:input wire:model="nome" label="Nome da equipa" required autofocus />
 
             <div class="grid gap-6 sm:grid-cols-2">
+                <flux:select wire:model="season_id" label="Época" required>
+                    @foreach ($epocas as $epoca)
+                        <flux:select.option value="{{ $epoca->id }}">{{ $epoca->name }}{{ $epoca->is_current ? ' (actual)' : '' }}</flux:select.option>
+                    @endforeach
+                </flux:select>
+
                 <flux:select wire:model="sport_id" label="Modalidade" required>
                     @foreach ($sports as $sport)
                         <flux:select.option value="{{ $sport->id }}">{{ $sport->nome }}</flux:select.option>

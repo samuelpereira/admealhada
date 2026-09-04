@@ -23,8 +23,8 @@ class About extends Component
             ->groupBy('categoria');
 
         return view('livewire.site.about', [
-            'totalEquipas' => Team::count(),
-            'totalJogadores' => Player::where('papel', 'jogador')->count(),
+            'totalEquipas' => Team::query()->currentSeason()->count(),
+            'totalJogadores' => Player::query()->where('papel', 'jogador')->onCurrentSeasonTeam()->count(),
             'totalPatrocinadores' => Sponsor::where('ativo', true)->count(),
             'orgaosSociais' => $orgaosSociais,
             'categorias' => SocialBody::CATEGORIAS,

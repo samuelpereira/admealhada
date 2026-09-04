@@ -2,12 +2,30 @@
     <x-site.page-header
         eyebrow="Basquetebol"
         title="As nossas equipas"
-        subtitle="Conhece quem representa as nossas cores em cada escalão." />
+        :subtitle="$season->is_current ? 'Conhece quem representa as nossas cores em cada escalão.' : 'Arquivo da época '.$season->name.'.'" />
 
     <section class="site-shell py-14">
+        @if ($epocas->count() > 1)
+            <nav class="mb-8 flex flex-wrap gap-2" aria-label="Épocas">
+                @foreach ($epocas as $epoca)
+                    <a
+                        href="{{ $epoca->publicIndexUrl() }}"
+                        @class([
+                            'inline-flex min-h-10 items-center rounded-md px-3 py-1.5 text-sm font-black uppercase',
+                            'bg-brand-900 text-white' => $epoca->is($season),
+                            'bg-surface text-body ring-1 ring-line hover:bg-brand-50 dark:hover:bg-white/5' => ! $epoca->is($season),
+                        ])
+                    >{{ $epoca->name }}</a>
+                @endforeach
+            </nav>
+        @endif
+
+        @if ($equipas->isEmpty())
+            <p class="site-card border-dashed p-6 text-sm text-muted">Ainda não há equipas nesta época.</p>
+        @else
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             @foreach ($equipas as $team)
-                <a href="{{ route('equipas.show', $team) }}" class="site-card group flex flex-col hover:-translate-y-1">
+                <a href="{{ $team->publicShowUrl() }}" class="site-card group flex flex-col hover:-translate-y-1">
                     <div class="relative aspect-[4/3] overflow-hidden bg-brand-950">
                         <x-site.media
                             :src="$team->foto"
@@ -36,5 +54,6 @@
                 </a>
             @endforeach
         </div>
+        @endif
     </section>
 </div>

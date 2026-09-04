@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\News;
+use App\Models\Season;
 use App\Models\Sponsor;
 use App\Models\Team;
 use Carbon\CarbonImmutable;
@@ -80,6 +81,7 @@ class AppServiceProvider extends ServiceProvider
         $routeTitle = trim((string) ($data['title'] ?? ''));
         $news = request()->route('news');
         $team = request()->route('team');
+        $season = request()->route('season');
 
         $pageTitle = filled($routeTitle)
             ? (Str::contains($routeTitle, config('app.name')) ? $routeTitle : $routeTitle.' - '.$siteName)
@@ -113,12 +115,21 @@ class AppServiceProvider extends ServiceProvider
         }
 
         if ($team instanceof Team) {
-            $pageTitle = $team->nome.' - '.$siteName;
+            $archiveSeason = $season instanceof Season && ! $season->is_current
+                ? $season
+                : ($team->season && ! $team->season->is_current ? $team->season : null);
+
+            $pageTitle = $archiveSeason
+                ? $team->nome.' · '.$archiveSeason->name.' - '.$siteName
+                : $team->nome.' - '.$siteName;
             $pageDescription = $team->descricao ?: 'Plantel, equipa técnica, competição e informação da equipa '.$team->nome.' da AD Mealhada.';
 
             if (filled($team->foto)) {
                 $shareImage = url(Storage::url($team->foto));
             }
+        } elseif ($season instanceof Season) {
+            $pageTitle = 'Equipas · '.$season->name.' - '.$siteName;
+            $pageDescription = 'Equipas de basquetebol da AD Mealhada na época '.$season->name.'.';
         }
 
         $sameAs = array_values(array_filter([

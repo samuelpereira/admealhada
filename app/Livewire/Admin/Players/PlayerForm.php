@@ -57,7 +57,7 @@ class PlayerForm extends Component
             $this->ordem = $player->ordem ?? 0;
             $this->fotoAtual = $player->foto;
         } else {
-            $this->team_id = $team ? (int) $team : Team::query()->orderBy('ordem')->value('id');
+            $this->team_id = $team ? (int) $team : Team::query()->forAdminLists()->value('id');
         }
     }
 
@@ -117,7 +117,7 @@ class PlayerForm extends Component
     public function render(): View
     {
         return view('livewire.admin.players.form', [
-            'teams' => Team::orderBy('ordem')->orderBy('nome')->get(),
+            'teams' => Team::query()->forAdminLists()->get(),
         ]);
     }
 }

@@ -9,6 +9,8 @@ use App\Livewire\Admin\News\NewsForm;
 use App\Livewire\Admin\News\NewsIndex;
 use App\Livewire\Admin\Players\PlayerForm;
 use App\Livewire\Admin\Players\PlayersIndex;
+use App\Livewire\Admin\Seasons\SeasonForm;
+use App\Livewire\Admin\Seasons\SeasonsIndex;
 use App\Livewire\Admin\SocialBodies\SocialBodiesIndex;
 use App\Livewire\Admin\SocialBodies\SocialBodyForm;
 use App\Livewire\Admin\Sponsors\SponsorForm;
@@ -33,9 +35,13 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::livewire('modalidades/nova', SportForm::class)->name('sports.create');
         Route::livewire('modalidades/{sport}/editar', SportForm::class)->name('sports.edit');
 
+        Route::livewire('epocas', SeasonsIndex::class)->name('seasons.index');
+        Route::livewire('epocas/nova', SeasonForm::class)->name('seasons.create');
+        Route::livewire('epocas/{season}/editar', SeasonForm::class)->name('seasons.edit');
+
         Route::livewire('equipas', TeamsIndex::class)->name('teams.index');
         Route::livewire('equipas/nova', TeamForm::class)->name('teams.create');
-        Route::livewire('equipas/{team}/editar', TeamForm::class)->name('teams.edit');
+        Route::livewire('equipas/{team:id}/editar', TeamForm::class)->name('teams.edit');
 
         Route::livewire('jogadores', PlayersIndex::class)->name('players.index');
         Route::livewire('jogadores/novo', PlayerForm::class)->name('players.create');

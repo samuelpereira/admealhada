@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Album;
 use App\Models\News;
+use App\Models\Season;
 use App\Models\Team;
+use App\Support\SitemapCache;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Cache;
 
@@ -12,7 +14,7 @@ class SitemapController extends Controller
 {
     public function __invoke(): Response
     {
-        $xml = Cache::remember('sitemap.xml', now()->addDay(), function (): string {
+        $xml = Cache::remember(SitemapCache::KEY, now()->addDay(), function (): string {
             $urls = collect([
                 ['loc' => route('home'), 'priority' => '1.0'],
                 ['loc' => route('clube'), 'priority' => '0.8'],
@@ -24,13 +26,24 @@ class SitemapController extends Controller
                 ['loc' => route('contactos'), 'priority' => '0.7'],
             ]);
 
+            Season::query()
+                ->where('is_current', false)
+                ->whereHas('teams')
+                ->orderByDesc('starts_at')
+                ->get()
+                ->each(fn (Season $season) => $urls->push([
+                    'loc' => $season->publicIndexUrl(),
+                    'priority' => '0.6',
+                ]));
+
             Team::query()
+                ->with('season')
                 ->orderBy('ordem')
                 ->get()
                 ->each(fn (Team $team) => $urls->push([
-                    'loc' => route('equipas.show', $team),
+                    'loc' => $team->publicShowUrl(),
                     'lastmod' => $team->updated_at?->toAtomString(),
-                    'priority' => '0.8',
+                    'priority' => $team->season?->is_current ? '0.8' : '0.5',
                 ]));
 
             News::query()

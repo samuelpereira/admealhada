@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\FlushesSitemapCache;
 use Database\Factories\NewsFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,7 +25,7 @@ use Illuminate\Support\Carbon;
 class News extends Model
 {
     /** @use HasFactory<NewsFactory> */
-    use HasFactory;
+    use FlushesSitemapCache, HasFactory;
 
     protected $table = 'news';
 

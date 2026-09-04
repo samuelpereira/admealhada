@@ -49,7 +49,7 @@ class GamesIndex extends Component
 
         return view('livewire.admin.games.index', [
             'games' => $games,
-            'teams' => Team::orderBy('ordem')->orderBy('nome')->get(),
+            'teams' => Team::query()->forAdminLists()->get(),
         ]);
     }
 }

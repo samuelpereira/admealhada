@@ -195,7 +195,7 @@ class AlbumForm extends Component
     public function render(): View
     {
         return view('livewire.admin.albums.form', [
-            'teams' => Team::orderBy('ordem')->orderBy('nome')->get(),
+            'teams' => Team::query()->forAdminLists()->get(),
             'fotos' => $this->album ? $this->album->photos()->get() : collect(),
         ]);
     }

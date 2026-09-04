@@ -27,7 +27,7 @@
 
     <div class="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1 border-t border-line pt-3 text-xs text-muted">
         @if ($showTeam)
-            <a href="{{ route('equipas.show', $game->team) }}" class="font-semibold text-brand-600 hover:underline dark:text-brand-300">{{ $game->team->nome }}</a>
+            <a href="{{ $game->team->publicShowUrl() }}" class="font-semibold text-brand-600 hover:underline dark:text-brand-300">{{ $game->team->nome }}</a>
             <span>·</span>
         @endif
         @if ($game->competicaoLabel())

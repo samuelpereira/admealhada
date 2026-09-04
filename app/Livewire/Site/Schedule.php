@@ -118,7 +118,7 @@ class Schedule extends Component
     public function render(): View
     {
         $proximos = Game::query()
-            ->with('team')
+            ->with('team.season')
             ->proximos()
             ->epoca($this->epoca)
             ->when($this->teamId !== '', fn ($q) => $q->where('team_id', $this->teamId))
@@ -126,7 +126,7 @@ class Schedule extends Component
             ->get();
 
         $resultadosQuery = Game::query()
-            ->with('team')
+            ->with('team.season')
             ->resultados()
             ->epoca($this->epoca)
             ->when($this->teamId !== '', fn ($q) => $q->where('team_id', $this->teamId))

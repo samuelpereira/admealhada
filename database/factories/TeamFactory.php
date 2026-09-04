@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Season;
 use App\Models\Team;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -18,6 +19,7 @@ class TeamFactory extends Factory
         $nome = rtrim(fake()->sentence(3), '.');
 
         return [
+            'season_id' => Season::factory(),
             'sport_id' => null,
             'nome' => $nome,
             'slug' => Str::slug($nome),

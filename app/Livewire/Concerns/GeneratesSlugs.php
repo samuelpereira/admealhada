@@ -8,9 +8,11 @@ use Illuminate\Support\Str;
 trait GeneratesSlugs
 {
     /**
-     * Generate a slug that is unique within the given table.
+     * Generate a slug that is unique within the given table, optionally scoped by extra columns.
+     *
+     * @param  array<string, mixed>  $constraints
      */
-    protected function uniqueSlug(string $source, string $table, ?int $ignoreId = null, string $column = 'slug'): string
+    protected function uniqueSlug(string $source, string $table, ?int $ignoreId = null, string $column = 'slug', array $constraints = []): string
     {
         $base = Str::slug($source);
 
@@ -25,6 +27,7 @@ trait GeneratesSlugs
             DB::table($table)
                 ->where($column, $slug)
                 ->when($ignoreId, fn ($query) => $query->where('id', '!=', $ignoreId))
+                ->when($constraints !== [], fn ($query) => $query->where($constraints))
                 ->exists()
         ) {
             $slug = $base.'-'.$suffix;

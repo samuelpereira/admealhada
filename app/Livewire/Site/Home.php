@@ -21,16 +21,16 @@ class Home extends Component
     public function render(): View
     {
         return view('livewire.site.home', [
-            'proximosJogos' => Game::query()->with('team')->proximos()->take(4)->get(),
-            'ultimosResultados' => Game::query()->with('team')->resultados()->take(4)->get(),
+            'proximosJogos' => Game::query()->with('team.season')->proximos()->take(4)->get(),
+            'ultimosResultados' => Game::query()->with('team.season')->resultados()->take(4)->get(),
             'noticias' => News::query()->publicadas()->take(3)->get(),
             'destaque' => News::query()->publicadas()->where('destaque', true)->first()
                 ?? News::query()->publicadas()->first(),
-            'equipas' => Team::query()->orderBy('ordem')->get(),
+            'equipas' => Team::query()->currentSeason()->with('season')->orderBy('ordem')->get(),
             'modalidades' => Sport::query()->where('ativo', true)->orderBy('nome')->get(),
             'albuns' => Album::query()->withCount('photos')->latest('data')->take(4)->get(),
-            'totalEquipas' => Team::query()->count(),
-            'totalJogadores' => Player::query()->where('papel', 'jogador')->count(),
+            'totalEquipas' => Team::query()->currentSeason()->count(),
+            'totalJogadores' => Player::query()->where('papel', 'jogador')->onCurrentSeasonTeam()->count(),
             'totalPatrocinadores' => Sponsor::query()->where('ativo', true)->count(),
         ]);
     }

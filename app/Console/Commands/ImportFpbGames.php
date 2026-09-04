@@ -11,7 +11,7 @@ use Throwable;
 class ImportFpbGames extends Command
 {
     protected $signature = 'fpb:import
-        {team? : ID ou slug da equipa (omitir para importar todas as equipas com link FPB)}
+        {team? : ID ou slug da época actual (omitir para importar as equipas da época actual com link FPB)}
         {--keep-removed : Não eliminar registos importados que já não constam na FPB}
         {--games-only : Importar apenas o calendário/resultados}
         {--players-only : Importar apenas o plantel}';
@@ -23,6 +23,10 @@ class ImportFpbGames extends Command
         $teams = $this->resolveTeams();
 
         if ($teams->isEmpty()) {
+            if ($this->argument('team') !== null) {
+                return self::FAILURE;
+            }
+
             $this->warn('Nenhuma equipa com link FPB definido.');
 
             return self::SUCCESS;
@@ -63,25 +67,29 @@ class ImportFpbGames extends Command
     /**
      * @return Collection<int, Team>
      */
-    protected function resolveTeams()
+    protected function resolveTeams(): Collection
     {
         $arg = $this->argument('team');
 
-        if ($arg !== null) {
-            $team = Team::query()
-                ->where('id', $arg)
-                ->orWhere('slug', $arg)
-                ->first();
-
-            if (! $team) {
-                $this->error("Equipa \"{$arg}\" não encontrada.");
-
-                return collect();
-            }
-
-            return collect([$team]);
+        if ($arg === null) {
+            return Team::query()
+                ->currentSeason()
+                ->whereNotNull('fpb_url')
+                ->where('fpb_url', '!=', '')
+                ->orderBy('ordem')
+                ->get();
         }
 
-        return Team::query()->whereNotNull('fpb_url')->orderBy('ordem')->get();
+        $team = ctype_digit((string) $arg)
+            ? Team::query()->find($arg)
+            : Team::query()->currentSeason()->where('slug', $arg)->first();
+
+        if (! $team) {
+            $this->error("Equipa \"{$arg}\" não encontrada.");
+
+            return collect();
+        }
+
+        return collect([$team]);
     }
 }

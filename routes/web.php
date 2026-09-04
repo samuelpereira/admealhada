@@ -19,6 +19,12 @@ Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 Route::get('/', Home::class)->name('home');
 Route::get('/clube', About::class)->name('clube');
 Route::get('/equipas', Teams::class)->name('equipas');
+Route::get('/equipas/{season}', Teams::class)
+    ->name('equipas.season')
+    ->where('season', '[0-9]{4}-[0-9]{4}');
+Route::get('/equipas/{season}/{team}', TeamShow::class)
+    ->name('equipas.show.season')
+    ->where('season', '[0-9]{4}-[0-9]{4}');
 Route::get('/equipas/{team}', TeamShow::class)->name('equipas.show');
 Route::get('/patrocinadores', Sponsors::class)->name('patrocinadores');
 Route::get('/calendario', Schedule::class)->name('calendario');

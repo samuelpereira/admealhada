@@ -132,7 +132,7 @@
         <x-site.section-heading title="As nossas equipas" subtitle="Conhece quem representa as nossas cores em cada escalão." :link="route('equipas')" />
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
             @foreach ($equipas as $team)
-                <a href="{{ route('equipas.show', $team) }}" class="site-card group relative flex aspect-square flex-col justify-end hover:-translate-y-1">
+                <a href="{{ $team->publicShowUrl() }}" class="site-card group relative flex aspect-square flex-col justify-end hover:-translate-y-1">
                     <x-site.media :src="$team->foto" :seed="$team->id" :icon="false" class="absolute inset-0 transition duration-300 group-hover:scale-105" />
                     <div class="absolute inset-0 bg-gradient-to-t from-brand-950/90 via-brand-950/30 to-transparent"></div>
                     <div class="relative p-4">

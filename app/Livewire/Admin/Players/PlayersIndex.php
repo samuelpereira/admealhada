@@ -41,7 +41,7 @@ class PlayersIndex extends Component
 
         return view('livewire.admin.players.index', [
             'players' => $players,
-            'teams' => Team::orderBy('ordem')->orderBy('nome')->get(),
+            'teams' => Team::query()->forAdminLists()->get(),
         ]);
     }
 }

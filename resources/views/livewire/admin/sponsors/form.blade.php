@@ -22,7 +22,7 @@
                         <p class="mb-3 text-sm text-zinc-500">Seleciona as equipas associadas a este patrocinador principal.</p>
                         <div class="grid gap-2 sm:grid-cols-2">
                             @foreach ($equipas as $equipa)
-                                <flux:checkbox wire:model="teamIds" value="{{ $equipa->id }}" :label="$equipa->nome" />
+                                <flux:checkbox wire:model="teamIds" value="{{ $equipa->id }}" :label="$equipa->adminLabel()" />
                             @endforeach
                         </div>
                         @error('teamIds')

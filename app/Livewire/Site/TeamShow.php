@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Site;
 
+use App\Models\Season;
 use App\Models\Team;
 use App\Support\MediaUrl;
 use Illuminate\Support\Facades\View as ViewFacade;
@@ -15,20 +16,30 @@ class TeamShow extends Component
 {
     public Team $team;
 
-    public function mount(Team $team): void
+    public function mount(Team $team, ?Season $season = null): void
     {
-        $this->team = $team->load(['sport', 'players', 'sponsors']);
+        if ($season?->is_current) {
+            abort(301, '', ['Location' => route('equipas.show', $team)]);
+        }
+
+        $this->team = $team->load(['sport', 'players', 'sponsors', 'season']);
     }
 
     public function render(): View
     {
+        $title = $this->team->nome.' - '.config('app.name');
+
+        if ($this->team->season && ! $this->team->season->is_current) {
+            $title = $this->team->nome.' · '.$this->team->season->name.' - '.config('app.name');
+        }
+
         return ViewFacade::make('livewire.site.team-show', [
             'jogadores' => $this->team->players->where('papel', 'jogador'),
             'staff' => $this->team->players->where('papel', '!=', 'jogador'),
-            'proximosJogos' => $this->team->games()->proximos()->take(5)->get(),
-            'resultados' => $this->team->games()->resultados()->take(8)->get(),
+            'proximosJogos' => $this->team->games()->with('team.season')->proximos()->take(5)->get(),
+            'resultados' => $this->team->games()->with('team.season')->resultados()->take(8)->get(),
             'teamSchema' => $this->teamSchema(),
-        ])->title($this->team->nome.' - '.config('app.name'));
+        ])->title($title);
     }
 
     /**
@@ -41,7 +52,7 @@ class TeamShow extends Component
             '@type' => 'SportsTeam',
             'name' => $this->team->nome,
             'sport' => 'Basketball',
-            'url' => url()->current(),
+            'url' => $this->team->publicShowUrl(),
             'image' => MediaUrl::absolute($this->team->foto, Vite::asset('resources/images/hero-hand-ball.png')),
             'description' => $this->team->descricao ?: 'Equipa de basquetebol da AD Mealhada.',
             'memberOf' => [

@@ -42,6 +42,9 @@
                     <flux:sidebar.item icon="trophy" :href="route('admin.sports.index')" :current="request()->routeIs('admin.sports.*')" wire:navigate>
                         Modalidades
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="calendar-date-range" :href="route('admin.seasons.index')" :current="request()->routeIs('admin.seasons.*')" wire:navigate>
+                        Épocas
+                    </flux:sidebar.item>
                     <flux:sidebar.item icon="user-group" :href="route('admin.teams.index')" :current="request()->routeIs('admin.teams.*')" wire:navigate>
                         Equipas
                     </flux:sidebar.item>

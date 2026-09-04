@@ -7,7 +7,7 @@
         <div class="grid gap-6 sm:grid-cols-2">
             <flux:select wire:model="team_id" label="Equipa do clube" required>
                 @foreach ($teams as $t)
-                    <flux:select.option value="{{ $t->id }}">{{ $t->nome }}</flux:select.option>
+                    <flux:select.option value="{{ $t->id }}">{{ $t->adminLabel() }}</flux:select.option>
                 @endforeach
             </flux:select>
 

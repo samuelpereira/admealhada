@@ -25,7 +25,7 @@
                             @endforeach
                         </div>
 
-                        <a href="{{ route('equipas.show', $team) }}" class="mt-4 inline-flex min-h-10 items-center text-sm font-black text-brand-700 hover:text-rim-600 dark:text-brand-300">
+                        <a href="{{ $team->publicShowUrl() }}" class="mt-4 inline-flex min-h-10 items-center text-sm font-black text-brand-700 hover:text-rim-600 dark:text-brand-300">
                             Ver equipa
                         </a>
                     </div>

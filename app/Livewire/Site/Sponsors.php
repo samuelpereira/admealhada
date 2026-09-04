@@ -17,7 +17,7 @@ class Sponsors extends Component
     {
         $equipas = Team::query()
             ->orderBy('ordem')
-            ->with(['sponsors'])
+            ->with(['sponsors', 'season'])
             ->get()
             ->filter(fn (Team $team) => $team->sponsors->isNotEmpty());
 

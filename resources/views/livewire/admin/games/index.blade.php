@@ -7,7 +7,7 @@
         <flux:select wire:model.live="team" label="Equipa" class="max-w-xs">
             <flux:select.option value="">Todas as equipas</flux:select.option>
             @foreach ($teams as $t)
-                <flux:select.option value="{{ $t->id }}">{{ $t->nome }}</flux:select.option>
+                <flux:select.option value="{{ $t->id }}">{{ $t->adminLabel() }}</flux:select.option>
             @endforeach
         </flux:select>
 

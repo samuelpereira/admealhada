@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Season;
 use App\Models\Sport;
 use App\Models\Team;
 use Illuminate\Database\Seeder;
@@ -70,9 +71,14 @@ class TeamSeeder extends Seeder
             ],
         ];
 
+        $season = Season::ensureCurrent();
+
         foreach ($teams as $i => $data) {
             Team::updateOrCreate(
-                ['slug' => Str::slug($data['nome'])],
+                [
+                    'season_id' => $season->id,
+                    'slug' => Str::slug($data['nome']),
+                ],
                 array_merge($data, [
                     'sport_id' => $sport->id,
                     'foto' => null,

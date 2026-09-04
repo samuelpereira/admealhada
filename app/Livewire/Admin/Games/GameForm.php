@@ -55,7 +55,7 @@ class GameForm extends Component
             $this->pontos_casa = $game->pontos_casa;
             $this->pontos_fora = $game->pontos_fora;
         } else {
-            $this->team_id = Team::query()->orderBy('ordem')->value('id');
+            $this->team_id = Team::query()->forAdminLists()->value('id');
         }
     }
 
@@ -102,7 +102,7 @@ class GameForm extends Component
     public function render(): View
     {
         return view('livewire.admin.games.form', [
-            'teams' => Team::orderBy('ordem')->orderBy('nome')->get(),
+            'teams' => Team::query()->forAdminLists()->get(),
         ]);
     }
 }
