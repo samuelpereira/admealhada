@@ -174,7 +174,7 @@ class SponsorSeeder extends Seeder
                 'nome' => 'FARMÁCIA TERMAL DA CURIA',
                 'link' => 'https://farmaciatermal.com.pt',
                 'ordem' => 114,
-            ]
+            ],
         ];
 
         foreach ($sponsors as $sponsor) {
