@@ -1,0 +1,17 @@
+---
+description: Laravel 13 + Livewire conventions for this app
+alwaysApply: true
+---
+
+# Laravel
+
+Follow Laravel and Livewire conventions. Do not invent shortcuts that fight the framework.
+
+- Keep Blade as markup. No `@php`. Put logic in Livewire classes, class-based view components (`app/View/Components`), Eloquent models, or a view composer when the data is layout-wide.
+- Do not stuff page-specific data into `AppServiceProvider`. Composers are for shared layout concerns only (nav, SEO, sponsors strip).
+- Prefer Eloquent scopes, model methods, and form requests over fat controllers or Blade condition trees.
+- Resolve storage/public URLs in PHP (`App\Support\MediaUrl`), not with facades inlined in views.
+- Match existing patterns: invokable controllers for single actions, Livewire for pages, Pint + PHPStan level 7.
+- Run container CLI as `devuser` (`docker compose exec -u devuser`) so cache files are not owned by root.
+- Do not assume product or visual decisions. Ask first.
+---

@@ -1,0 +1,11 @@
+---
+description: Commit only when asked; push together with the commit
+alwaysApply: true
+---
+
+# Git
+
+- Never commit unless the user asked to commit, or confirmed a commit after being asked.
+- When committing, also push to the tracked remote branch. Do not force-push.
+- Do not amend commits unless the user explicitly asks.
+---
