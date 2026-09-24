@@ -57,7 +57,11 @@
                     </div>
                 @endif
 
-                <form wire:submit="submit" class="space-y-5">
+                <form
+                    class="space-y-5"
+                    x-data
+                    x-on:submit.prevent="$wire.submit(window.grecaptcha && typeof window.grecaptcha.getResponse === 'function' ? window.grecaptcha.getResponse() : '')"
+                >
                     <div>
                         <label for="nome" class="mb-1.5 block text-sm font-semibold text-body">Nome</label>
                         <input type="text" id="nome" wire:model="nome" class="min-h-11 w-full rounded-md border-line bg-surface text-sm text-ink shadow-sm focus:border-brand-500 focus:ring-brand-500" placeholder="O teu nome">
@@ -78,6 +82,20 @@
                         <textarea id="mensagem" wire:model="mensagem" rows="5" class="w-full rounded-md border-line bg-surface text-sm text-ink shadow-sm focus:border-brand-500 focus:ring-brand-500" placeholder="Escreve a tua mensagem..."></textarea>
                         @error('mensagem') <p class="mt-1 text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                     </div>
+                    @if (filled(config('services.recaptcha.site_key')))
+                        <div wire:ignore x-on:recaptcha-reset.window="window.grecaptcha && window.grecaptcha.reset()">
+                            <div class="g-recaptcha" data-sitekey="{{ config('services.recaptcha.site_key') }}"></div>
+                            <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+                        </div>
+                    @endif
+                    @error('recaptcha') <p class="text-xs text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                    <p class="text-xs text-muted">
+                        Este formulário está protegido pelo reCAPTCHA e aplicam-se a
+                        <a href="https://policies.google.com/privacy" class="underline" target="_blank" rel="noopener noreferrer">Política de Privacidade</a>
+                        e os
+                        <a href="https://policies.google.com/terms" class="underline" target="_blank" rel="noopener noreferrer">Termos de Serviço</a>
+                        da Google.
+                    </p>
                     <button type="submit" class="btn-primary w-full disabled:opacity-60" wire:loading.attr="disabled" wire:target="submit">
                         <span wire:loading.remove wire:target="submit">Enviar mensagem</span>
                         <span wire:loading wire:target="submit">A enviar...</span>

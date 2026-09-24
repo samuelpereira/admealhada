@@ -9,6 +9,7 @@ return [
         'phone' => env('SITE_CONTACT_PHONE', '+351 231 000 000'),
         'facebook' => env('SITE_CONTACT_FACEBOOK'),
         'instagram' => env('SITE_CONTACT_INSTAGRAM'),
+        'form_email' => env('SITE_FORM_EMAIL'),
     ],
 
     'user' => [
