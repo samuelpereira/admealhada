@@ -25,7 +25,7 @@ class SponsorsCarousel extends Component
         }
 
         while ($this->track->count() < 12) {
-            $this->track = $this->track->concat($sponsors);
+            $this->track = $this->track->concat($sponsors)->values();
         }
     }
 
