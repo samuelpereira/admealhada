@@ -35,11 +35,11 @@ class GameCard extends Component
         $advNome = $game->adversario;
 
         $this->topNome = $this->emCasa ? $adNome : $advNome;
-        $this->topPontos = $this->emCasa ? $game->pontos_casa : $game->pontos_fora;
+        $this->topPontos = $game->pontos_casa;
         $this->topIsAd = $this->emCasa;
 
         $this->bottomNome = $this->emCasa ? $advNome : $adNome;
-        $this->bottomPontos = $this->emCasa ? $game->pontos_fora : $game->pontos_casa;
+        $this->bottomPontos = $game->pontos_fora;
         $this->bottomIsAd = ! $this->emCasa;
 
         $this->terminado = $game->estado === 'terminado';
