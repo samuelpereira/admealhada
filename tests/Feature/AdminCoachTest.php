@@ -73,3 +73,18 @@ test('an admin can delete a coach', function () {
 
     expect(Coach::query()->find($coach->id))->toBeNull();
 });
+
+test('coaches on a team page follow the order they were assigned', function () {
+    $season = Season::ensureCurrent();
+    $sport = Sport::factory()->create();
+    $team = Team::factory()->for($sport)->for($season)->create();
+    $later = Coach::factory()->create(['nome' => 'Ana Lopes']);
+    $earlier = Coach::factory()->create(['nome' => 'Zé Mendes']);
+
+    $team->coaches()->attach($earlier, ['created_at' => '2026-01-01 10:00:00', 'updated_at' => '2026-01-01 10:00:00']);
+    $team->coaches()->attach($later, ['created_at' => '2026-06-01 10:00:00', 'updated_at' => '2026-06-01 10:00:00']);
+
+    $this->get($team->publicShowUrl())
+        ->assertOk()
+        ->assertSeeInOrder(['Zé Mendes', 'Ana Lopes']);
+});

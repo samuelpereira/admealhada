@@ -218,7 +218,10 @@ class Team extends Model
     /** @return BelongsToMany<Coach, $this> */
     public function coaches(): BelongsToMany
     {
-        return $this->belongsToMany(Coach::class)->orderBy('coaches.nome');
+        return $this->belongsToMany(Coach::class)
+            ->withTimestamps()
+            ->orderBy('coach_team.created_at')
+            ->orderBy('coach_team.id');
     }
 
     /** @return BelongsToMany<Sponsor, $this> */
