@@ -37,7 +37,7 @@ class SponsorsIndex extends Component
         return view('livewire.admin.sponsors.index', [
             'sponsors' => Sponsor::query()
                 ->with('teams')
-                ->orderBy('tipo')
+                ->orderByDesc('ativo')
                 ->orderBy('ordem')
                 ->orderBy('nome')
                 ->get(),
