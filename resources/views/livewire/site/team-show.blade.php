@@ -98,7 +98,9 @@
                 @if ($team->sponsors->isNotEmpty())
                     <div>
                         <h2 class="mb-4 text-lg font-bold text-ink">Patrocinadores da Equipa</h2>
-                        <div class="grid grid-cols-3 gap-3">
+                        <div @class([
+                            'grid grid-cols-3 gap-3' => $team->sponsors->count() > 1,
+                        ])>
                             @foreach ($team->sponsors as $sponsor)
                                 <x-site.sponsor-card :sponsor="$sponsor" />
                             @endforeach
