@@ -22,7 +22,7 @@ class Home extends Component
     {
         return view('livewire.site.home', [
             'proximosJogos' => Game::query()->with('team.season')->proximos()->take(4)->get(),
-            'ultimosResultados' => Game::query()->with('team.season')->resultados()->take(4)->get(),
+            'ultimosResultados' => Game::query()->with('team.season')->resultados()->epoca(Game::epocaAtual())->take(4)->get(),
             'noticias' => News::query()->publicadas()->take(3)->get(),
             'destaque' => News::query()->publicadas()->where('destaque', true)->first()
                 ?? News::query()->publicadas()->first(),
