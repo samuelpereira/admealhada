@@ -39,5 +39,6 @@ test('the home page says there are no results yet when the current season has no
 
     Livewire::test(Home::class)
         ->assertSee('Ainda não há resultados.')
+        ->assertSee(route('calendario').'#resultados', false)
         ->assertDontSee('Resultados a sincronizar pela API.');
 });

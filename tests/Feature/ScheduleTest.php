@@ -24,6 +24,7 @@ test('the calendar team filter lists only teams from the selected season', funct
 
     Livewire::test(Schedule::class)
         ->assertSet('epoca', '2026/2027')
+        ->assertSee('id="resultados"', false)
         ->assertSee('Séniores época actual')
         ->assertDontSee('Séniores época arquivo')
         ->set('epoca', '2024/2025')

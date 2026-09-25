@@ -84,7 +84,7 @@
                 </div>
 
                 <div class="rounded-lg border border-line bg-surface-2 p-4 sm:p-6">
-                    <x-site.section-heading title="Últimos resultados" :link="route('calendario')" link-label="Ver todos" />
+                    <x-site.section-heading title="Últimos resultados" :link="route('calendario').'#resultados'" link-label="Ver todos" />
                     @if ($ultimosResultados->isEmpty())
                         <p class="site-card border-dashed p-6 text-sm text-muted">Ainda não há resultados.</p>
                     @else

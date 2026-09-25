@@ -53,7 +53,7 @@
                 @endif
             </div>
 
-            <div>
+            <div id="resultados" class="scroll-mt-24">
                 <x-site.section-heading title="Resultados" />
                 @if ($resultados->isEmpty())
                     <p class="site-card border-dashed p-6 text-sm text-muted">Sem resultados para esta seleção.</p>
