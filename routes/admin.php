@@ -21,6 +21,8 @@ use App\Livewire\Admin\Sports\SportForm;
 use App\Livewire\Admin\Sports\SportsIndex;
 use App\Livewire\Admin\Teams\TeamForm;
 use App\Livewire\Admin\Teams\TeamsIndex;
+use App\Livewire\Admin\Users\UserForm;
+use App\Livewire\Admin\Users\UsersIndex;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'admin'])
@@ -28,6 +30,10 @@ Route::middleware(['auth', 'verified', 'admin'])
     ->name('admin.')
     ->group(function () {
         Route::livewire('/', Dashboard::class)->name('dashboard');
+
+        Route::livewire('utilizadores', UsersIndex::class)->name('users.index');
+        Route::livewire('utilizadores/novo', UserForm::class)->name('users.create');
+        Route::livewire('utilizadores/{user}/editar', UserForm::class)->name('users.edit');
 
         Route::livewire('noticias', NewsIndex::class)->name('news.index');
         Route::livewire('noticias/nova', NewsForm::class)->name('news.create');

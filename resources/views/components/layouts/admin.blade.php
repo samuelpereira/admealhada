@@ -21,6 +21,9 @@
                     <flux:sidebar.item icon="home" :href="route('admin.dashboard')" :current="request()->routeIs('admin.dashboard')" wire:navigate>
                         Dashboard
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="user" :href="route('admin.users.index')" :current="request()->routeIs('admin.users.*')" wire:navigate>
+                        Utilizadores
+                    </flux:sidebar.item>
                 </flux:sidebar.group>
 
                 <flux:sidebar.group :heading="__('Conteúdo')" class="grid">
