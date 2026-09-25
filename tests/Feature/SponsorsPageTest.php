@@ -57,3 +57,40 @@ test('the team page shows an inactive principal sponsor', function () {
         ->assertOk()
         ->assertDontSee('Parceiro Inativo');
 });
+
+test('the sponsors page lists only teams from the current season', function () {
+    $sport = Sport::factory()->create();
+    $currentTeam = Team::factory()->for($sport)->for(Season::ensureCurrent())->create([
+        'nome' => 'Séniores época actual',
+    ]);
+    $archiveTeam = Team::factory()->for($sport)->for(Season::ensureForName('2024/2025'))->create([
+        'nome' => 'Séniores época arquivo',
+    ]);
+
+    $currentSponsor = Sponsor::query()->create([
+        'nome' => 'Parceiro Actual',
+        'logo' => 'patrocinadores/actual.png',
+        'link' => 'https://example.com/actual',
+        'tipo' => Sponsor::TIPO_PRINCIPAL,
+        'ordem' => 0,
+        'ativo' => true,
+    ]);
+    $archiveSponsor = Sponsor::query()->create([
+        'nome' => 'Parceiro Arquivo',
+        'logo' => 'patrocinadores/arquivo.png',
+        'link' => 'https://example.com/arquivo',
+        'tipo' => Sponsor::TIPO_PRINCIPAL,
+        'ordem' => 0,
+        'ativo' => true,
+    ]);
+
+    $currentTeam->sponsors()->attach($currentSponsor);
+    $archiveTeam->sponsors()->attach($archiveSponsor);
+
+    $this->get(route('patrocinadores'))
+        ->assertOk()
+        ->assertSee('Séniores época actual')
+        ->assertSee('Parceiro Actual')
+        ->assertDontSee('Séniores época arquivo')
+        ->assertDontSee('Parceiro Arquivo');
+});

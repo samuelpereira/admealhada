@@ -16,6 +16,7 @@ class Sponsors extends Component
     public function render(): View
     {
         $equipas = Team::query()
+            ->currentSeason()
             ->orderBy('ordem')
             ->with(['sponsors', 'season'])
             ->get()
