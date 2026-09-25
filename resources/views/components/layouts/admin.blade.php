@@ -66,9 +66,6 @@
                 <flux:sidebar.item icon="globe-alt" :href="route('home')" target="_blank">
                     Ver o site
                 </flux:sidebar.item>
-                <flux:sidebar.item icon="cog" :href="route('profile.edit')" wire:navigate>
-                    Definições
-                </flux:sidebar.item>
             </flux:sidebar.nav>
 
             <flux:dropdown position="top" align="start" class="max-lg:hidden">
