@@ -2,6 +2,8 @@
 
 use App\Livewire\Admin\Albums\AlbumForm;
 use App\Livewire\Admin\Albums\AlbumsIndex;
+use App\Livewire\Admin\Coaches\CoachesIndex;
+use App\Livewire\Admin\Coaches\CoachForm;
 use App\Livewire\Admin\Dashboard;
 use App\Livewire\Admin\Games\GameForm;
 use App\Livewire\Admin\Games\GamesIndex;
@@ -46,6 +48,10 @@ Route::middleware(['auth', 'verified', 'admin'])
         Route::livewire('jogadores', PlayersIndex::class)->name('players.index');
         Route::livewire('jogadores/novo', PlayerForm::class)->name('players.create');
         Route::livewire('jogadores/{player}/editar', PlayerForm::class)->name('players.edit');
+
+        Route::livewire('treinadores', CoachesIndex::class)->name('coaches.index');
+        Route::livewire('treinadores/novo', CoachForm::class)->name('coaches.create');
+        Route::livewire('treinadores/{coach}/editar', CoachForm::class)->name('coaches.edit');
 
         Route::livewire('jogos', GamesIndex::class)->name('games.index');
         Route::livewire('jogos/novo', GameForm::class)->name('games.create');

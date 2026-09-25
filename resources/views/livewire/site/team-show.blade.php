@@ -67,6 +67,30 @@
                         </div>
                     @endif
                 </div>
+
+                @if ($team->coaches->isNotEmpty())
+                    <div class="mt-10">
+                        <h2 class="mb-6 flex items-center gap-3 text-2xl font-black uppercase text-ink">
+                            <span class="h-1.5 w-8 rounded-full bg-rim-500"></span>
+                            Treinadores
+                        </h2>
+                        <div class="flex flex-wrap gap-4">
+                            @foreach ($team->coaches as $treinador)
+                                <div class="site-card flex items-center gap-3 p-3 pr-5">
+                                    <div class="h-12 w-12 overflow-hidden rounded-full">
+                                        <x-site.media :src="$treinador->foto" :seed="$treinador->id" :icon="false" />
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-bold text-ink">{{ $treinador->nome }}</p>
+                                        @if ($treinador->grau)
+                                            <p class="text-xs font-black uppercase text-rim-600 dark:text-rim-300">{{ $treinador->grau }}</p>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
             </div>
 
             {{-- Sidebar jogos --}}

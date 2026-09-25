@@ -31,6 +31,8 @@ test('admin sidebar lists epochs under modalidades without dropping other items'
         ->assertSee(route('admin.seasons.index'), false)
         ->assertSee('Equipas')
         ->assertSee('Jogadores')
+        ->assertSee('Treinadores')
+        ->assertSee(route('admin.coaches.index'), false)
         ->assertSee('Jogos');
 });
 

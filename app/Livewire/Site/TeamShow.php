@@ -22,7 +22,7 @@ class TeamShow extends Component
             abort(301, '', ['Location' => route('equipas.show', $team)]);
         }
 
-        $this->team = $team->load(['sport', 'players', 'sponsors', 'season']);
+        $this->team = $team->load(['sport', 'players', 'sponsors', 'coaches', 'season']);
     }
 
     public function render(): View

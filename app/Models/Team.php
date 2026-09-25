@@ -215,6 +215,12 @@ class Team extends Model
         return $this->hasMany(Album::class);
     }
 
+    /** @return BelongsToMany<Coach, $this> */
+    public function coaches(): BelongsToMany
+    {
+        return $this->belongsToMany(Coach::class)->orderBy('coaches.nome');
+    }
+
     /** @return BelongsToMany<Sponsor, $this> */
     public function sponsors(): BelongsToMany
     {

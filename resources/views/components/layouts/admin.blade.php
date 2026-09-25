@@ -51,6 +51,9 @@
                     <flux:sidebar.item icon="identification" :href="route('admin.players.index')" :current="request()->routeIs('admin.players.*')" wire:navigate>
                         Jogadores
                     </flux:sidebar.item>
+                    <flux:sidebar.item icon="academic-cap" :href="route('admin.coaches.index')" :current="request()->routeIs('admin.coaches.*')" wire:navigate>
+                        Treinadores
+                    </flux:sidebar.item>
                     <flux:sidebar.item icon="calendar-days" :href="route('admin.games.index')" :current="request()->routeIs('admin.games.*')" wire:navigate>
                         Jogos
                     </flux:sidebar.item>
