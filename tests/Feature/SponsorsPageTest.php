@@ -36,3 +36,24 @@ test('the sponsors page titles team sponsors as sponsors by team', function () {
         ->assertOk()
         ->assertSeeInOrder(['Patrocinadores da Equipa', 'Próximos jogos']);
 });
+
+test('the team page shows an inactive principal sponsor', function () {
+    $team = Team::factory()->for(Sport::factory())->for(Season::ensureCurrent())->create();
+    $sponsor = Sponsor::query()->create([
+        'nome' => 'Parceiro Inativo',
+        'logo' => 'patrocinadores/inativo.png',
+        'link' => 'https://example.com/inativo',
+        'tipo' => Sponsor::TIPO_PRINCIPAL,
+        'ordem' => 0,
+        'ativo' => false,
+    ]);
+    $team->sponsors()->attach($sponsor);
+
+    $this->get($team->publicShowUrl())
+        ->assertOk()
+        ->assertSee('Parceiro Inativo');
+
+    $this->get(route('patrocinadores'))
+        ->assertOk()
+        ->assertDontSee('Parceiro Inativo');
+});

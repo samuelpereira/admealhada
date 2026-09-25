@@ -233,6 +233,16 @@ class Team extends Model
     }
 
     /** @return BelongsToMany<Sponsor, $this> */
+    public function teamSponsors(): BelongsToMany
+    {
+        return $this->belongsToMany(Sponsor::class)
+            ->where('sponsors.tipo', Sponsor::TIPO_PRINCIPAL)
+            ->whereNotNull('sponsors.logo')
+            ->orderBy('sponsors.ordem')
+            ->orderBy('sponsors.nome');
+    }
+
+    /** @return BelongsToMany<Sponsor, $this> */
     public function allSponsors(): BelongsToMany
     {
         return $this->belongsToMany(Sponsor::class)->orderBy('sponsors.ordem');
