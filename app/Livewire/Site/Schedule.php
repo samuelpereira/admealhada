@@ -4,6 +4,7 @@ namespace App\Livewire\Site;
 
 use App\Models\Game;
 use App\Models\Team;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
@@ -31,6 +32,8 @@ class Schedule extends Component
         if ($this->epoca === '') {
             $this->epoca = Game::epocaAtual();
         }
+
+        $this->forgetTeamOutsideSeason();
     }
 
     public function loadMoreResultados(): void
@@ -42,14 +45,14 @@ class Schedule extends Component
     {
         $this->resetResultadosLimit();
 
-        if ($this->competicaoFilter !== '' && ! array_key_exists($this->competicaoFilter, $this->competicaoOptions())) {
-            $this->competicaoFilter = '';
-        }
+        $this->forgetCompeticaoOutsideOptions();
     }
 
     public function updatedEpoca(): void
     {
         $this->resetResultadosLimit();
+        $this->forgetTeamOutsideSeason();
+        $this->forgetCompeticaoOutsideOptions();
     }
 
     public function updatedCompeticaoFilter(): void
@@ -60,6 +63,40 @@ class Schedule extends Component
     protected function resetResultadosLimit(): void
     {
         $this->resultadosLimit = 20;
+    }
+
+    protected function forgetTeamOutsideSeason(): void
+    {
+        if ($this->teamId === '') {
+            return;
+        }
+
+        $belongsToSeason = $this->equipaOptions()->contains(
+            fn (Team $team): bool => (string) $team->id === $this->teamId,
+        );
+
+        if (! $belongsToSeason) {
+            $this->teamId = '';
+        }
+    }
+
+    protected function forgetCompeticaoOutsideOptions(): void
+    {
+        if ($this->competicaoFilter !== '' && ! array_key_exists($this->competicaoFilter, $this->competicaoOptions())) {
+            $this->competicaoFilter = '';
+        }
+    }
+
+    /**
+     * @return Collection<int, Team>
+     */
+    protected function equipaOptions(): Collection
+    {
+        return Team::query()
+            ->whereRelation('season', 'name', $this->epoca)
+            ->orderBy('ordem')
+            ->orderBy('nome')
+            ->get();
     }
 
     /**
@@ -139,7 +176,7 @@ class Schedule extends Component
             ->get();
 
         return view('livewire.site.schedule', [
-            'equipas' => Team::query()->orderBy('ordem')->get(),
+            'equipas' => $this->equipaOptions(),
             'epocas' => $this->epocaOptions(),
             'competicoes' => $this->competicaoOptions(),
             'proximos' => $proximos,
