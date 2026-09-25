@@ -6,7 +6,7 @@
 
     @if ($equipas->isNotEmpty())
         <section class="site-shell py-14">
-            <x-site.section-heading title="Patrocinadores principais" subtitle="Patrocinadores associados a cada equipa." />
+            <x-site.section-heading title="Patrocinadores por Equipa" subtitle="Patrocinadores associados a cada equipa." />
 
             <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 @foreach ($equipas as $team)
@@ -40,7 +40,7 @@
             'site-shell py-14' => $equipas->isEmpty(),
         ])>
             <div @class(['site-shell' => $equipas->isNotEmpty()])>
-                <x-site.section-heading title="Patrocinadores gerais" subtitle="Parceiros que apoiam o clube na globalidade." />
+                <x-site.section-heading title="Patrocinadores" subtitle="Parceiros que apoiam o clube na globalidade." />
 
                 <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                     @foreach ($patrocinadoresGerais as $sponsor)
