@@ -42,6 +42,7 @@ test('a scheduled home game shows casa and hides the result', function () {
     ]);
 
     $this->component(GameCard::class, ['game' => $game, 'showTeam' => false])
+        ->assertSee('bg-brand-700')
         ->assertSee('Casa')
         ->assertDontSee('Fora')
         ->assertDontSee('Vitória')
@@ -57,6 +58,8 @@ test('a scheduled away game shows fora and hides the result', function () {
     ]);
 
     $this->component(GameCard::class, ['game' => $game, 'showTeam' => false])
+        ->assertSee('bg-rim-100')
+        ->assertDontSee('bg-zinc-800')
         ->assertSee('Fora')
         ->assertDontSee('Casa')
         ->assertDontSee('Vitória')

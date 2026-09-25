@@ -10,11 +10,11 @@
                 <span class="rounded-md bg-red-100 px-2 py-1 font-black text-red-700 dark:bg-red-500/15 dark:text-red-400">Derrota</span>
             @endif
         @else
-            <span @class([
-                'rounded-md px-2 py-1 font-black',
-                'bg-brand-700 text-white' => $emCasa,
-                'bg-zinc-800 text-white dark:bg-zinc-200 dark:text-zinc-900' => ! $emCasa,
-            ])>{{ $emCasa ? 'Casa' : 'Fora' }}</span>
+            @if ($emCasa)
+                <span class="rounded-md bg-brand-700 px-2 py-1 font-black text-white">Casa</span>
+            @else
+                <span class="rounded-md bg-rim-100 px-2 py-1 font-black text-rim-800 dark:bg-rim-500/20 dark:text-rim-200">Fora</span>
+            @endif
         @endif
     </div>
 
