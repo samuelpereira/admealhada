@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\HtmlString;
 
 /**
  * @property int $id
@@ -47,6 +48,17 @@ class Album extends Model
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    /**
+     * Description safe for HTML: line breaks and **bold** only.
+     */
+    public function formattedDescription(): HtmlString
+    {
+        $text = e((string) $this->descricao);
+        $withBold = preg_replace('/\*\*(.+?)\*\*/u', '<strong>$1</strong>', $text) ?? $text;
+
+        return new HtmlString(nl2br($withBold, false));
     }
 
     /** @return BelongsTo<Team, $this> */

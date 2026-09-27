@@ -22,7 +22,7 @@
                                 @if ($album->data)<span>{{ $album->data->translatedFormat('d M Y') }}</span>@endif
                                 @if ($album->team)<span>·</span><span>{{ $album->team->nome }}</span>@endif
                             </div>
-                            <p class="mt-2 line-clamp-2 text-sm text-body">{{ $album->descricao }}</p>
+                            <p class="mt-2 line-clamp-2 text-sm text-body">{!! $album->formattedDescription() !!}</p>
                         </div>
                     </a>
                 @endforeach

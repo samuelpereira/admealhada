@@ -1,5 +1,8 @@
 <div>
-    <x-site.page-header :title="$album->titulo" :subtitle="$album->descricao">
+    <x-site.page-header :title="$album->titulo">
+        @if ($album->descricao)
+            <p class="mt-3 max-w-2xl text-base leading-7 text-brand-100/90 sm:text-lg">{!! $album->formattedDescription() !!}</p>
+        @endif
         <div class="mt-4 flex flex-wrap items-center gap-3 text-sm text-brand-200">
             @if ($album->data)<span>{{ $album->data->translatedFormat('d \d\e F \d\e Y') }}</span>@endif
             @if ($album->team)<span>·</span><a href="{{ $album->team->publicShowUrl() }}" class="hover:text-white">{{ $album->team->nome }}</a>@endif

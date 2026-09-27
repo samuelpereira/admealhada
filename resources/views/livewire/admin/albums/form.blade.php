@@ -18,7 +18,7 @@
                 <flux:input type="date" wire:model="data" label="Data" />
             </div>
 
-            <flux:textarea wire:model="descricao" label="Descrição" rows="3" />
+            <flux:textarea wire:model="descricao" label="Descrição" rows="3" description="Uma linha nova faz quebra de linha. **texto** fica a negrito." />
         </div>
 
         <div class="space-y-6">
