@@ -153,7 +153,7 @@
                 <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
                     @foreach ($albuns as $album)
                         <a href="{{ route('galeria.show', $album) }}" class="site-card group relative aspect-[4/5] hover:-translate-y-1">
-                            <x-site.media :src="$album->capa" :seed="$album->id" :icon="false" class="absolute inset-0 transition duration-500 group-hover:scale-105" />
+                            <x-site.media :src="$album->capa_miniatura ?: $album->capa" :seed="$album->id" :icon="false" class="absolute inset-0 transition duration-500 group-hover:scale-105" />
                             <div class="absolute inset-0 bg-gradient-to-t from-brand-950/90 via-brand-950/35 to-transparent"></div>
                             <div class="absolute inset-x-0 bottom-0 p-4">
                                 <span class="rounded-md bg-white/90 px-2.5 py-1 text-xs font-black uppercase text-brand-800">{{ $album->photos_count }} fotos</span>

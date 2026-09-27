@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $id
  * @property int $album_id
  * @property string $caminho
+ * @property string|null $miniatura
  * @property string|null $legenda
  * @property int $ordem
  *
@@ -24,6 +25,7 @@ class Photo extends Model
     protected $fillable = [
         'album_id',
         'caminho',
+        'miniatura',
         'legenda',
         'ordem',
     ];

@@ -20,9 +20,11 @@ class AlbumsIndex extends Component
     {
         foreach ($album->photos as $photo) {
             $this->deleteImage($photo->caminho);
+            $this->deleteImage($photo->miniatura);
         }
 
         $this->deleteImage($album->capa);
+        $this->deleteImage($album->capa_miniatura);
         $album->delete();
 
         Flux::toast(variant: 'success', text: 'Galeria eliminada.');

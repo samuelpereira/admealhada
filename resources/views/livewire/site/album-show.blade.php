@@ -31,7 +31,7 @@
             <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
                 @foreach ($album->photos as $i => $photo)
                     <button type="button" wire:key="photo-{{ $photo->id }}" @click="show({{ $i }})" class="site-card group relative aspect-square">
-                        <x-site.media :src="$photo->caminho" :seed="$photo->id" :icon="false" class="transition duration-300 group-hover:scale-105" />
+                        <x-site.media :src="$photo->miniatura ?: $photo->caminho" :seed="$photo->id" :icon="false" class="transition duration-300 group-hover:scale-105" />
                         <span class="absolute inset-0 flex items-center justify-center bg-black/0 transition group-hover:bg-black/20">
                             <svg class="h-8 w-8 text-white opacity-0 transition group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m15.75 15.75-2.489-2.489m0 0a3.375 3.375 0 1 0-4.773-4.773 3.375 3.375 0 0 0 4.774 4.774ZM21 21l-5.197-5.197" /></svg>
                         </span>

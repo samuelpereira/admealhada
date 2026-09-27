@@ -17,6 +17,7 @@ use Illuminate\Support\Carbon;
  * @property string $slug
  * @property string|null $descricao
  * @property string|null $capa
+ * @property string|null $capa_miniatura
  * @property Carbon|null $data
  *
  * @use HasFactory<AlbumFactory>
@@ -32,6 +33,7 @@ class Album extends Model
         'slug',
         'descricao',
         'capa',
+        'capa_miniatura',
         'data',
     ];
 

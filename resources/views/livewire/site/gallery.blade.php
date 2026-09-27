@@ -12,7 +12,7 @@
                 @foreach ($albuns as $album)
                     <a href="{{ route('galeria.show', $album) }}" class="site-card group flex flex-col hover:-translate-y-1">
                         <div class="relative aspect-[4/3] overflow-hidden">
-                            <x-site.media :src="$album->capa" :seed="$album->id" :icon="false" class="transition duration-300 group-hover:scale-105" />
+                            <x-site.media :src="$album->capa_miniatura ?: $album->capa" :seed="$album->id" :icon="false" class="transition duration-300 group-hover:scale-105" />
                             <div class="absolute inset-0 bg-gradient-to-t from-brand-950/60 to-transparent"></div>
                             <span class="absolute bottom-3 right-3 rounded-md bg-rim-500 px-3 py-1 text-xs font-black text-white">{{ $album->photos_count }} fotos</span>
                         </div>

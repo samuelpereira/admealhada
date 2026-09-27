@@ -76,7 +76,7 @@
                         <div wire:key="foto-{{ $foto->id }}" class="overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-700">
                             <div class="aspect-square bg-zinc-100 dark:bg-zinc-800">
                                 @if ($foto->caminho)
-                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($foto->caminho) }}" class="h-full w-full object-cover" alt="">
+                                    <img src="{{ \Illuminate\Support\Facades\Storage::url($foto->miniatura ?: $foto->caminho) }}" class="h-full w-full object-cover" alt="">
                                 @endif
                             </div>
                             <div class="space-y-2 p-2">

@@ -13,7 +13,7 @@
                 <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
                     <div class="aspect-video bg-zinc-100 dark:bg-zinc-800">
                         @if ($album->capa)
-                            <img src="{{ \Illuminate\Support\Facades\Storage::url($album->capa) }}" class="h-full w-full object-cover" alt="">
+                            <img src="{{ \Illuminate\Support\Facades\Storage::url($album->capa_miniatura ?: $album->capa) }}" class="h-full w-full object-cover" alt="">
                         @else
                             <div class="flex h-full items-center justify-center">
                                 <flux:icon.photo class="h-10 w-10 text-zinc-300" />

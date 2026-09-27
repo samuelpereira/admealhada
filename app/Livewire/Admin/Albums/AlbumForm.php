@@ -6,6 +6,7 @@ use App\Livewire\Concerns\GeneratesSlugs;
 use App\Livewire\Concerns\HandlesImageUpload;
 use App\Models\Album;
 use App\Models\Team;
+use App\Support\GalleryThumbnail;
 use Flux\Flux;
 use Illuminate\Support\Carbon;
 use Illuminate\View\View;
@@ -78,11 +79,11 @@ class AlbumForm extends Component
         $this->capa = null;
 
         if ($this->capaAtual) {
-            $this->deleteImage($this->capaAtual);
+            $this->deleteUnsharedCover();
             $this->capaAtual = null;
 
             if ($this->album) {
-                $this->album->update(['capa' => null]);
+                $this->album->update(['capa' => null, 'capa_miniatura' => null]);
             }
         }
     }
@@ -100,8 +101,10 @@ class AlbumForm extends Component
         ];
 
         if ($this->capa) {
-            $this->deleteImage($this->capaAtual);
-            $data['capa'] = $this->storeImage($this->capa, 'galerias');
+            $this->deleteUnsharedCover();
+            $stored = GalleryThumbnail::store($this->capa, 'galerias');
+            $data['capa'] = $stored['original'];
+            $data['capa_miniatura'] = $stored['thumbnail'];
             $this->capaAtual = $data['capa'];
             $this->capa = null;
         }
@@ -134,8 +137,10 @@ class AlbumForm extends Component
 
         foreach ($this->novasFotos as $file) {
             $ordem++;
+            $stored = GalleryThumbnail::store($file, 'galerias');
             $this->album->photos()->create([
-                'caminho' => $this->storeImage($file, 'galerias'),
+                'caminho' => $stored['original'],
+                'miniatura' => $stored['thumbnail'],
                 'ordem' => $ordem,
             ]);
         }
@@ -160,7 +165,10 @@ class AlbumForm extends Component
         $photo = $this->album?->photos()->find($photoId);
 
         if ($photo && $photo->caminho) {
-            $this->album->update(['capa' => $photo->caminho]);
+            $this->album->update([
+                'capa' => $photo->caminho,
+                'capa_miniatura' => $photo->miniatura,
+            ]);
             $this->capaAtual = $photo->caminho;
             Flux::toast(text: 'Capa definida.');
         }
@@ -175,16 +183,33 @@ class AlbumForm extends Component
         }
 
         if ($this->album->capa === $photo->caminho) {
-            $this->album->update(['capa' => null]);
+            $this->album->update(['capa' => null, 'capa_miniatura' => null]);
             $this->capaAtual = null;
         }
 
         $this->deleteImage($photo->caminho);
+        $this->deleteImage($photo->miniatura);
         $photo->delete();
 
         $this->refreshLegendas();
 
         Flux::toast(variant: 'success', text: 'Foto removida.');
+    }
+
+    protected function deleteUnsharedCover(): void
+    {
+        if (! $this->album || $this->capaAtual === null) {
+            return;
+        }
+
+        $sharedWithPhoto = $this->album->photos()->where('caminho', $this->capaAtual)->exists();
+
+        if ($sharedWithPhoto) {
+            return;
+        }
+
+        $this->deleteImage($this->capaAtual);
+        $this->deleteImage($this->album->capa_miniatura);
     }
 
     protected function refreshLegendas(): void
