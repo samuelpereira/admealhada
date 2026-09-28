@@ -22,9 +22,9 @@ class Dashboard extends Component
         return view('livewire.admin.dashboard', [
             'cards' => [
                 ['label' => 'Notícias', 'value' => News::count(), 'icon' => 'newspaper', 'route' => 'admin.news.index'],
-                ['label' => 'Equipas', 'value' => Team::count(), 'icon' => 'user-group', 'route' => 'admin.teams.index'],
-                ['label' => 'Jogadores', 'value' => Player::count(), 'icon' => 'identification', 'route' => 'admin.players.index'],
-                ['label' => 'Jogos', 'value' => Game::count(), 'icon' => 'calendar-days', 'route' => 'admin.games.index'],
+                ['label' => 'Equipas', 'value' => Team::query()->currentSeason()->count(), 'icon' => 'user-group', 'route' => 'admin.teams.index'],
+                ['label' => 'Jogadores', 'value' => Player::countPeopleInCurrentSeason(), 'icon' => 'identification', 'route' => 'admin.players.index'],
+                ['label' => 'Jogos', 'value' => Game::query()->whereHas('team', fn ($query) => $query->currentSeason())->count(), 'icon' => 'calendar-days', 'route' => 'admin.games.index'],
                 ['label' => 'Galerias', 'value' => Album::count(), 'icon' => 'photo', 'route' => 'admin.albums.index'],
             ],
             'proximosJogos' => Game::query()->with('team')->proximos()->take(5)->get(),

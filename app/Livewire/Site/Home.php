@@ -30,7 +30,7 @@ class Home extends Component
             'modalidades' => Sport::query()->where('ativo', true)->orderBy('nome')->get(),
             'albuns' => Album::query()->withCount('photos')->latest('data')->take(4)->get(),
             'totalEquipas' => Team::query()->currentSeason()->count(),
-            'totalJogadores' => Player::query()->where('papel', 'jogador')->onCurrentSeasonTeam()->count(),
+            'totalJogadores' => Player::countPeopleInCurrentSeason('jogador'),
             'totalPatrocinadores' => Sponsor::query()->where('ativo', true)->count(),
         ]);
     }

@@ -53,4 +53,20 @@ class Player extends Model
     {
         return $query->whereRelation('team', 'season_id', Season::current()?->id);
     }
+
+    /**
+     * People on current-season teams. The same fpb_id on several teams counts once.
+     * Rows without an fpb_id stay separate, because they cannot be matched.
+     */
+    public static function countPeopleInCurrentSeason(?string $papel = null): int
+    {
+        $players = static::query()
+            ->onCurrentSeasonTeam()
+            ->when($papel !== null, fn (Builder $query): Builder => $query->where('papel', $papel));
+
+        $identified = (clone $players)->whereNotNull('fpb_id')->distinct()->count('fpb_id');
+        $manual = (clone $players)->whereNull('fpb_id')->count();
+
+        return $identified + $manual;
+    }
 }

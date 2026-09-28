@@ -118,6 +118,20 @@ test('home and clube counts ignore teams and players from other seasons', functi
         ->assertViewHas('totalJogadores', 1);
 });
 
+test('home and clube count one player when the same fpb id is on two current teams', function () {
+    ['current' => $current, 'sport' => $sport, 'currentTeam' => $currentTeam] = seasonTeams();
+    $secondTeam = Team::factory()->for($sport)->for($current)->create([
+        'nome' => 'Sub-16 época actual',
+        'slug' => 'sub-16-masculinos',
+    ]);
+
+    Player::factory()->for($currentTeam)->create(['fpb_id' => 'fpb-100']);
+    Player::factory()->for($secondTeam)->create(['fpb_id' => 'fpb-100']);
+
+    Livewire::test(Home::class)->assertViewHas('totalJogadores', 1);
+    Livewire::test(About::class)->assertViewHas('totalJogadores', 1);
+});
+
 test('sitemap lists short urls for current teams and long urls for archive teams', function () {
     ['current' => $current, 'archive' => $archive, 'currentTeam' => $currentTeam, 'archiveTeam' => $archiveTeam] = seasonTeams();
 
