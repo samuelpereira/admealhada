@@ -50,3 +50,28 @@ test('the public roster keeps the birth year and hides the full birth date', fun
         ->assertDontSee('17/03/2011')
         ->assertDontSee('2011-03-17');
 });
+
+test('the player list follows the selected season and its teams', function () {
+    $current = Season::ensureCurrent();
+    $archive = Season::ensureForName('2024/2025');
+    $sport = Sport::factory()->create();
+    $currentTeam = Team::factory()->for($sport)->for($current)->create(['nome' => 'Equipa actual']);
+    $archiveTeam = Team::factory()->for($sport)->for($archive)->create(['nome' => 'Equipa arquivo']);
+
+    Player::factory()->for($currentTeam)->create(['nome' => 'Jogador actual']);
+    Player::factory()->for($archiveTeam)->create(['nome' => 'Jogador arquivo']);
+
+    Livewire::test(PlayersIndex::class)
+        ->assertSee('Jogador actual')
+        ->assertSee('Equipa actual')
+        ->assertDontSee('Jogador arquivo')
+        ->assertDontSee('Equipa arquivo')
+        ->set('epoca', $archive->slug)
+        ->set('team', (string) $archiveTeam->id)
+        ->assertSee('Jogador arquivo')
+        ->assertDontSee('Jogador actual')
+        ->set('epoca', $current->slug)
+        ->assertSet('team', '')
+        ->assertSee('Jogador actual')
+        ->assertDontSee('Jogador arquivo');
+});

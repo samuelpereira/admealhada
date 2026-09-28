@@ -4,8 +4,16 @@
             :href="route('admin.players.create', $team !== '' ? ['team' => $team] : [])" wire:navigate>Novo jogador</flux:button>
     </x-admin.header>
 
-    <div class="mb-4 max-w-xs">
-        <flux:select wire:model.live="team" label="Filtrar por equipa">
+    <div class="mb-4 flex flex-wrap gap-4">
+        @if ($epocas->isNotEmpty())
+            <flux:select wire:model.live="epoca" label="Época" class="max-w-xs">
+                @foreach ($epocas as $epoca)
+                    <flux:select.option value="{{ $epoca->slug }}">{{ $epoca->name }}{{ $epoca->is_current ? ' (actual)' : '' }}</flux:select.option>
+                @endforeach
+            </flux:select>
+        @endif
+
+        <flux:select wire:model.live="team" label="Filtrar por equipa" class="max-w-xs">
             <flux:select.option value="">Todas as equipas</flux:select.option>
             @foreach ($teams as $t)
                 <flux:select.option value="{{ $t->id }}">{{ $t->adminLabel() }}</flux:select.option>

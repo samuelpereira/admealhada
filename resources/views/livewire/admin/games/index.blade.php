@@ -4,6 +4,14 @@
     </x-admin.header>
 
     <div class="mb-4 flex flex-wrap gap-4">
+        @if ($epocas->isNotEmpty())
+            <flux:select wire:model.live="epoca" label="Época" class="max-w-xs">
+                @foreach ($epocas as $epoca)
+                    <flux:select.option value="{{ $epoca->slug }}">{{ $epoca->name }}{{ $epoca->is_current ? ' (actual)' : '' }}</flux:select.option>
+                @endforeach
+            </flux:select>
+        @endif
+
         <flux:select wire:model.live="team" label="Equipa" class="max-w-xs">
             <flux:select.option value="">Todas as equipas</flux:select.option>
             @foreach ($teams as $t)
