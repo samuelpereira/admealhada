@@ -2,17 +2,21 @@
 
 namespace App\Models;
 
+use App\Casts\EncryptedDate;
+use App\Casts\EncryptedString;
 use Database\Factories\PlayerFactory;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Carbon;
 
 /**
  * @property int $id
  * @property int $team_id
  * @property string|null $fpb_id
  * @property string $nome
+ * @property Carbon|null $data_nascimento
  * @property int|null $numero
  * @property string|null $posicao
  * @property int|null $ano_nascimento
@@ -31,6 +35,7 @@ class Player extends Model
         'team_id',
         'fpb_id',
         'nome',
+        'data_nascimento',
         'numero',
         'posicao',
         'ano_nascimento',
@@ -38,6 +43,17 @@ class Player extends Model
         'papel',
         'ordem',
     ];
+
+    /**
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'nome' => EncryptedString::class,
+            'data_nascimento' => EncryptedDate::class,
+        ];
+    }
 
     /** @return BelongsTo<Team, $this> */
     public function team(): BelongsTo

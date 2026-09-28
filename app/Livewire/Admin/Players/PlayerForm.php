@@ -26,6 +26,8 @@ class PlayerForm extends Component
 
     public string $nome = '';
 
+    public ?string $dataNascimento = null;
+
     public ?int $numero = null;
 
     public string $posicao = '';
@@ -50,6 +52,7 @@ class PlayerForm extends Component
             $this->player = $player;
             $this->team_id = $player->team_id;
             $this->nome = $player->nome;
+            $this->dataNascimento = $player->data_nascimento?->format('Y-m-d');
             $this->numero = $player->numero;
             $this->posicao = $player->posicao ?? '';
             $this->ano_nascimento = $player->ano_nascimento;
@@ -69,6 +72,7 @@ class PlayerForm extends Component
         return [
             'team_id' => ['required', 'exists:teams,id'],
             'nome' => ['required', 'string', 'max:255'],
+            'dataNascimento' => ['nullable', 'date', 'before:today'],
             'numero' => ['nullable', 'integer', 'min:0', 'max:99'],
             'posicao' => ['nullable', 'string', 'max:50'],
             'ano_nascimento' => ['nullable', 'integer', 'min:1950', 'max:'.(date('Y'))],
@@ -96,7 +100,8 @@ class PlayerForm extends Component
     {
         $validated = $this->validate();
 
-        $data = Arr::except($validated, ['foto']);
+        $data = Arr::except($validated, ['foto', 'dataNascimento']);
+        $data['data_nascimento'] = $validated['dataNascimento'] ?: null;
 
         if ($this->foto) {
             $this->deleteImage($this->fotoAtual);

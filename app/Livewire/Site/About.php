@@ -20,6 +20,7 @@ class About extends Component
         $orgaosSociais = SocialBody::query()
             ->ativos()
             ->get()
+            ->sortBy(fn (SocialBody $membro): string => sprintf('%010d%s', $membro->ordem, mb_strtolower($membro->nome)))
             ->groupBy('categoria');
 
         return view('livewire.site.about', [

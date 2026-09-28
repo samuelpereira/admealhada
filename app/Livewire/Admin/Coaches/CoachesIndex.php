@@ -30,8 +30,9 @@ class CoachesIndex extends Component
         return view('livewire.admin.coaches.coaches-index', [
             'coaches' => Coach::query()
                 ->with('teams.season')
-                ->orderBy('nome')
-                ->get(),
+                ->get()
+                ->sortBy(fn (Coach $coach): string => mb_strtolower($coach->nome))
+                ->values(),
         ]);
     }
 }

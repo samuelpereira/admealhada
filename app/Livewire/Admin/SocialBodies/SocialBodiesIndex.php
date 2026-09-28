@@ -33,8 +33,9 @@ class SocialBodiesIndex extends Component
             'socialBodies' => SocialBody::query()
                 ->orderBy('categoria')
                 ->orderBy('ordem')
-                ->orderBy('nome')
-                ->get(),
+                ->get()
+                ->sortBy(fn (SocialBody $membro): string => $membro->categoria.sprintf('%010d', $membro->ordem).mb_strtolower($membro->nome))
+                ->values(),
             'categorias' => SocialBody::CATEGORIAS,
         ]);
     }

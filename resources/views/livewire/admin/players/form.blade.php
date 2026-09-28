@@ -6,6 +6,7 @@
     <form wire:submit="save" class="grid gap-6 lg:grid-cols-3">
         <div class="space-y-6 rounded-xl border border-zinc-200 bg-white p-6 shadow-sm lg:col-span-2 dark:border-zinc-700 dark:bg-zinc-900">
             <flux:input wire:model="nome" label="Nome" required autofocus />
+            <flux:input wire:model="dataNascimento" label="Data de nascimento" type="date" />
 
             <div class="grid gap-6 sm:grid-cols-2">
                 <flux:select wire:model="team_id" label="Equipa" required>

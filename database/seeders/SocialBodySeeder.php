@@ -31,17 +31,25 @@ class SocialBodySeeder extends Seeder
         ];
 
         foreach ($membros as $membro) {
-            SocialBody::updateOrCreate(
-                [
-                    'categoria' => $membro['categoria'],
-                    'cargo' => $membro['cargo'],
-                    'nome' => $membro['nome'],
-                ],
-                [
+            $existing = SocialBody::query()
+                ->where('categoria', $membro['categoria'])
+                ->where('cargo', $membro['cargo'])
+                ->get()
+                ->first(fn (SocialBody $socialBody): bool => $socialBody->nome === $membro['nome']);
+
+            if ($existing instanceof SocialBody) {
+                $existing->update([
                     'ordem' => $membro['ordem'],
                     'ativo' => true,
-                ],
-            );
+                ]);
+
+                continue;
+            }
+
+            SocialBody::query()->create([
+                ...$membro,
+                'ativo' => true,
+            ]);
         }
     }
 }

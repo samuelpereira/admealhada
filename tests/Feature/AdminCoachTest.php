@@ -32,9 +32,9 @@ test('an admin can assign one coach to several teams', function () {
         ->assertHasNoErrors()
         ->assertRedirect(route('admin.coaches.index'));
 
-    $coach = Coach::query()->where('nome', 'Rui Costa')->first();
+    $coach = Coach::query()->sole();
 
-    expect($coach)->not->toBeNull()
+    expect($coach->nome)->toBe('Rui Costa')
         ->and($coach->nacionalidade)->toBe('Portugal')
         ->and($coach->data_nascimento?->toDateString())->toBe('1980-04-12')
         ->and($coach->teams)->toHaveCount(2);

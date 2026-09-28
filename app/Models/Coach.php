@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Casts\EncryptedDate;
+use App\Casts\EncryptedString;
 use Database\Factories\CoachFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -34,7 +36,9 @@ class Coach extends Model
     protected function casts(): array
     {
         return [
-            'data_nascimento' => 'date',
+            'nome' => EncryptedString::class,
+            'data_nascimento' => EncryptedDate::class,
+            'nacionalidade' => EncryptedString::class,
         ];
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\EncryptedString;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,6 +26,7 @@ class SocialBody extends Model
     protected function casts(): array
     {
         return [
+            'nome' => EncryptedString::class,
             'ordem' => 'integer',
             'ativo' => 'boolean',
         ];
@@ -38,8 +40,7 @@ class SocialBody extends Model
     {
         return $query
             ->where('ativo', true)
-            ->orderBy('ordem')
-            ->orderBy('nome');
+            ->orderBy('ordem');
     }
 
     public function categoriaLabel(): string

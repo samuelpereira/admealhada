@@ -19,6 +19,7 @@
                 <tr>
                     <th class="px-4 py-3">#</th>
                     <th class="px-4 py-3">Nome</th>
+                    <th class="px-4 py-3">Nascimento</th>
                     <th class="px-4 py-3">Equipa</th>
                     <th class="px-4 py-3">Posição / Papel</th>
                     <th class="px-4 py-3 text-right">Ações</th>
@@ -38,6 +39,7 @@
                                 <span class="font-semibold text-zinc-900 dark:text-white">{{ $player->nome }}</span>
                             </div>
                         </td>
+                        <td class="px-4 py-3 text-zinc-600 dark:text-zinc-300">{{ $player->data_nascimento?->format('d/m/Y') ?? '—' }}</td>
                         <td class="px-4 py-3 text-zinc-600 dark:text-zinc-300">{{ $player->team?->nome }}</td>
                         <td class="px-4 py-3">
                             <span class="text-zinc-600 dark:text-zinc-300">{{ $player->posicao ?: '—' }}</span>
@@ -56,7 +58,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="px-4 py-10 text-center text-zinc-500">Sem jogadores para o filtro selecionado.</td>
+                        <td colspan="6" class="px-4 py-10 text-center text-zinc-500">Sem jogadores para o filtro selecionado.</td>
                     </tr>
                 @endforelse
             </tbody>
