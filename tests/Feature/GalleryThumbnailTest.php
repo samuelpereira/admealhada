@@ -2,6 +2,7 @@
 
 use App\Livewire\Admin\Albums\AlbumForm;
 use App\Models\Album;
+use App\Models\Photo;
 use App\Models\User;
 use App\Support\GalleryThumbnail;
 use Illuminate\Http\UploadedFile;
@@ -68,4 +69,14 @@ test('uploading an album cover stores a thumbnail for the gallery list', functio
     $this->get(route('galeria'))
         ->assertOk()
         ->assertSee(Storage::url($album->capa_miniatura), false);
+});
+
+test('the admin gallery shows four photos per row', function () {
+    $this->actingAs(User::factory()->admin()->create());
+
+    $album = Album::factory()->create();
+    Photo::factory()->for($album)->create();
+
+    Livewire::test(AlbumForm::class, ['album' => $album])
+        ->assertSee('lg:grid-cols-4', false);
 });

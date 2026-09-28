@@ -71,7 +71,7 @@
             @if ($fotos->isEmpty())
                 <flux:text class="mt-6 text-zinc-500">Ainda não há fotografias nesta galeria.</flux:text>
             @else
-                <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                     @foreach ($fotos as $foto)
                         <div wire:key="foto-{{ $foto->id }}" class="overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-700">
                             <div class="aspect-square bg-zinc-100 dark:bg-zinc-800">
