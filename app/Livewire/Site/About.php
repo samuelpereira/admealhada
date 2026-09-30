@@ -25,7 +25,7 @@ class About extends Component
 
         return view('livewire.site.about', [
             'totalEquipas' => Team::query()->currentSeason()->count(),
-            'totalJogadores' => Player::countPeopleInCurrentSeason('jogador'),
+            'totalJogadores' => Player::countPeopleInCurrentSeason('jogador', onlyVisible: true),
             'totalPatrocinadores' => Sponsor::where('ativo', true)->count(),
             'orgaosSociais' => $orgaosSociais,
             'categorias' => SocialBody::CATEGORIAS,

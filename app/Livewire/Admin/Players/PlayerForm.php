@@ -38,6 +38,8 @@ class PlayerForm extends Component
 
     public int $ordem = 0;
 
+    public bool $ativo = true;
+
     /** @var TemporaryUploadedFile|null */
     public $foto = null;
 
@@ -58,6 +60,7 @@ class PlayerForm extends Component
             $this->ano_nascimento = $player->ano_nascimento;
             $this->papel = $player->papel;
             $this->ordem = $player->ordem ?? 0;
+            $this->ativo = $player->ativo;
             $this->fotoAtual = $player->foto;
         } else {
             $this->team_id = $team ? (int) $team : Team::query()->forAdminLists()->value('id');
@@ -78,6 +81,7 @@ class PlayerForm extends Component
             'ano_nascimento' => ['nullable', 'integer', 'min:1950', 'max:'.(date('Y'))],
             'papel' => ['required', 'string', 'max:50'],
             'ordem' => ['integer', 'min:0'],
+            'ativo' => ['boolean'],
             'foto' => ['nullable', 'image', 'max:4096'],
         ];
     }

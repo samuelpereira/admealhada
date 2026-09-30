@@ -23,6 +23,7 @@ use Illuminate\Support\Carbon;
  * @property string|null $foto
  * @property string $papel
  * @property int $ordem
+ * @property bool $ativo
  *
  * @use HasFactory<PlayerFactory>
  */
@@ -42,6 +43,14 @@ class Player extends Model
         'foto',
         'papel',
         'ordem',
+        'ativo',
+    ];
+
+    /**
+     * @var array<string, mixed>
+     */
+    protected $attributes = [
+        'ativo' => true,
     ];
 
     /**
@@ -52,6 +61,7 @@ class Player extends Model
         return [
             'nome' => EncryptedString::class,
             'data_nascimento' => EncryptedDate::class,
+            'ativo' => 'boolean',
         ];
     }
 
@@ -74,11 +84,12 @@ class Player extends Model
      * People on current-season teams. The same fpb_id on several teams counts once.
      * Rows without an fpb_id stay separate, because they cannot be matched.
      */
-    public static function countPeopleInCurrentSeason(?string $papel = null): int
+    public static function countPeopleInCurrentSeason(?string $papel = null, bool $onlyVisible = false): int
     {
         $players = static::query()
             ->onCurrentSeasonTeam()
-            ->when($papel !== null, fn (Builder $query): Builder => $query->where('papel', $papel));
+            ->when($papel !== null, fn (Builder $query): Builder => $query->where('papel', $papel))
+            ->when($onlyVisible, fn (Builder $query): Builder => $query->where('ativo', true));
 
         $identified = (clone $players)->whereNotNull('fpb_id')->distinct()->count('fpb_id');
         $manual = (clone $players)->whereNull('fpb_id')->count();

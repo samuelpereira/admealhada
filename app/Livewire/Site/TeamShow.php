@@ -34,8 +34,8 @@ class TeamShow extends Component
         }
 
         return ViewFacade::make('livewire.site.team-show', [
-            'jogadores' => $this->team->players->where('papel', 'jogador'),
-            'staff' => $this->team->players->where('papel', '!=', 'jogador'),
+            'jogadores' => $this->team->players->where('papel', 'jogador')->where('ativo', true),
+            'staff' => $this->team->players->where('papel', '!=', 'jogador')->where('ativo', true),
             'proximosJogos' => $this->team->games()->with('team.season')->proximos()->take(5)->get(),
             'resultados' => $this->team->games()->with('team.season')->resultados()->take(8)->get(),
             'teamSchema' => $this->teamSchema(),

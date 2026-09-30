@@ -23,6 +23,7 @@ class PlayerFactory extends Factory
             'foto' => null,
             'papel' => 'jogador',
             'ordem' => 0,
+            'ativo' => true,
         ];
     }
 

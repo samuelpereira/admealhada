@@ -140,6 +140,7 @@ class FpbGamesImporter
                     'posicao' => $j['posicao'] !== '' ? $j['posicao'] : null,
                     'papel' => 'jogador',
                     'ordem' => 0,
+                    'ativo' => true,
                     'foto' => $j['foto_url'] ? $this->downloadImage($j['foto_url'], 'jogadores') : null,
                 ]);
                 $player->save();
@@ -148,8 +149,8 @@ class FpbGamesImporter
                 continue;
             }
 
-            // Atualiza apenas dados oficiais; preserva foto, papel, ordem e
-            // posição introduzidos manualmente (a FPB nem sempre os fornece).
+            // Atualiza apenas dados oficiais; preserva foto, papel, ordem,
+            // visibilidade e posição introduzidos manualmente (a FPB nem sempre os fornece).
             $player->nome = $j['nome'];
             $player->numero = $j['numero'] !== '' ? (int) $j['numero'] : null;
 

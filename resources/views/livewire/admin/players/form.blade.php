@@ -26,6 +26,8 @@
                 <flux:input type="number" wire:model="ano_nascimento" label="Ano de nascimento" placeholder="Ex.: 2008" />
                 <flux:input type="number" wire:model="ordem" label="Ordem" min="0" />
             </div>
+
+            <flux:checkbox wire:model="ativo" label="Visível na equipa" />
         </div>
 
         <div class="space-y-6">

@@ -30,6 +30,7 @@
                     <th class="px-4 py-3">Nascimento</th>
                     <th class="px-4 py-3">Equipa</th>
                     <th class="px-4 py-3">Posição / Papel</th>
+                    <th class="px-4 py-3">Estado</th>
                     <th class="px-4 py-3 text-right">Ações</th>
                 </tr>
             </thead>
@@ -56,6 +57,13 @@
                             @endif
                         </td>
                         <td class="px-4 py-3">
+                            @if ($player->ativo)
+                                <flux:badge color="green" size="sm">Visível</flux:badge>
+                            @else
+                                <flux:badge color="zinc" size="sm">Oculto</flux:badge>
+                            @endif
+                        </td>
+                        <td class="px-4 py-3">
                             <div class="flex items-center justify-end gap-2">
                                 <flux:button size="xs" variant="subtle" icon="pencil" :href="route('admin.players.edit', $player)" wire:navigate>Editar</flux:button>
                                 <flux:button size="xs" variant="subtle" icon="trash"
@@ -66,7 +74,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-4 py-10 text-center text-zinc-500">Sem jogadores para o filtro selecionado.</td>
+                        <td colspan="7" class="px-4 py-10 text-center text-zinc-500">Sem jogadores para o filtro selecionado.</td>
                     </tr>
                 @endforelse
             </tbody>

@@ -194,7 +194,7 @@ class Team extends Model
     /** @return HasMany<Player, $this> */
     public function jogadores(): HasMany
     {
-        return $this->players()->where('papel', 'jogador');
+        return $this->players()->where('papel', 'jogador')->where('ativo', true);
     }
 
     /** @return HasMany<Player, $this> */
