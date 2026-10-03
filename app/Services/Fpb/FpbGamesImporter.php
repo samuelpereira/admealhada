@@ -5,6 +5,7 @@ namespace App\Services\Fpb;
 use App\Models\Game;
 use App\Models\Player;
 use App\Models\Team;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
@@ -55,11 +56,16 @@ class FpbGamesImporter
 
             $seenIds[] = $jogo['id'];
 
+            $game = Game::firstOrNew([
+                'team_id' => $team->id,
+                'fpb_id' => $jogo['id'],
+            ]);
+
             $temResultado = $jogo['pc'] !== null && $jogo['pf'] !== null;
 
             $attributes = [
                 'adversario' => $emCasa ? $jogo['away'] : $jogo['home'],
-                'data_hora' => $jogo['data_hora'],
+                'data_hora' => $this->dataHoraImportada($game, $jogo),
                 'local' => $jogo['loc'],
                 'casa_fora' => $emCasa ? 'casa' : 'fora',
                 'competicao' => $jogo['comp'],
@@ -67,11 +73,6 @@ class FpbGamesImporter
                 'pontos_fora' => $temResultado ? $jogo['pf'] : null,
                 'estado' => $temResultado ? 'terminado' : 'agendado',
             ];
-
-            $game = Game::firstOrNew([
-                'team_id' => $team->id,
-                'fpb_id' => $jogo['id'],
-            ]);
 
             $exists = $game->exists;
             $game->fill($attributes);
@@ -186,6 +187,23 @@ class FpbGamesImporter
             'deleted' => $deleted,
             'total' => count($seenIds),
         ];
+    }
+
+    /**
+     * A finished FPB fixture often has no kickoff time. Keep the time already stored.
+     *
+     * @param  array<string, mixed>  $jogo
+     */
+    protected function dataHoraImportada(Game $game, array $jogo): CarbonInterface
+    {
+        /** @var Carbon $parsed */
+        $parsed = $jogo['data_hora'];
+
+        if ($game->exists && $jogo['time'] === null) {
+            return $game->data_hora->copy()->setDate($parsed->year, $parsed->month, $parsed->day);
+        }
+
+        return $parsed;
     }
 
     /**
