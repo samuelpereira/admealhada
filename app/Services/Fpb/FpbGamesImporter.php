@@ -144,6 +144,7 @@ class FpbGamesImporter
                     'ativo' => true,
                     'foto' => $j['foto_url'] ? $this->downloadImage($j['foto_url'], 'jogadores') : null,
                 ]);
+                $player->inheritBirthDate();
                 $player->save();
                 $created++;
 
@@ -158,6 +159,8 @@ class FpbGamesImporter
             if ($j['posicao'] !== '') {
                 $player->posicao = $j['posicao'];
             }
+
+            $player->inheritBirthDate();
 
             if ($player->isDirty()) {
                 $player->save();

@@ -96,4 +96,55 @@ class Player extends Model
 
         return $identified + $manual;
     }
+
+    /**
+     * The FPB page has no birth date. Reuse one already stored for this athlete.
+     */
+    public function inheritBirthDate(): void
+    {
+        if ($this->fpb_id === null || $this->data_nascimento !== null) {
+            return;
+        }
+
+        $source = static::query()
+            ->where('fpb_id', $this->fpb_id)
+            ->when($this->exists, fn (Builder $query) => $query->whereKeyNot($this->id))
+            ->whereNotNull('data_nascimento')
+            ->orderByDesc('updated_at')
+            ->orderByDesc('id')
+            ->first();
+
+        $birthDate = $source?->data_nascimento;
+
+        if ($birthDate === null) {
+            return;
+        }
+
+        $this->data_nascimento = $birthDate->copy();
+    }
+
+    /**
+     * A birth date belongs to the athlete, so every roster row with this fpb_id stays in step.
+     */
+    public function shareBirthDate(): void
+    {
+        if ($this->fpb_id === null) {
+            return;
+        }
+
+        $date = $this->data_nascimento?->toDateString();
+
+        static::query()
+            ->where('fpb_id', $this->fpb_id)
+            ->whereKeyNot($this->id)
+            ->get()
+            ->each(function (Player $player) use ($date): void {
+                if ($player->data_nascimento?->toDateString() === $date) {
+                    return;
+                }
+
+                $player->data_nascimento = $date === null ? null : Carbon::parse($date);
+                $player->save();
+            });
+    }
 }

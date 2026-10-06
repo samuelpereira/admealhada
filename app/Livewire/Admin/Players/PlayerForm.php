@@ -114,9 +114,12 @@ class PlayerForm extends Component
 
         if ($this->player) {
             $this->player->update($data);
+            $saved = $this->player;
         } else {
-            Player::create($data);
+            $saved = Player::create($data);
         }
+
+        $saved->shareBirthDate();
 
         Flux::toast(variant: 'success', text: 'Jogador guardado.');
 
