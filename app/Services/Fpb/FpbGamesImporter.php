@@ -237,7 +237,7 @@ class FpbGamesImporter
 
             $jogadores[$idm[1]] = [
                 'fpb_id' => $idm[1],
-                'nome' => $this->clean($nome[1]),
+                'nome' => $this->nameCase($nome[1]),
                 'posicao' => isset($pos[1]) ? $this->clean($pos[1]) : '',
                 'numero' => $num[1] ?? '',
                 'foto_url' => $bust[1] ?? '',
@@ -405,5 +405,17 @@ class FpbGamesImporter
     protected function clean(string $value): string
     {
         return trim(preg_replace('/\s+/u', ' ', $value));
+    }
+
+    /**
+     * FPB often sends player names in capitals. Keep the first letter of each word.
+     */
+    protected function nameCase(string $value): string
+    {
+        $value = mb_strtolower($this->clean($value));
+
+        return preg_replace_callback('/\p{L}+/u', function (array $match): string {
+            return mb_strtoupper(mb_substr($match[0], 0, 1)).mb_substr($match[0], 1);
+        }, $value) ?? $value;
     }
 }

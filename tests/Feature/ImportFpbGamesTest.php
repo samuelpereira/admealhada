@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Game;
+use App\Models\Player;
 use App\Models\Season;
 use App\Models\Sport;
 use App\Models\Team;
@@ -152,4 +153,37 @@ HTML),
         ->and($finished->fresh()->estado)->toBe('terminado')
         ->and($finished->fresh()->pontos_casa)->toBe(72)
         ->and(Game::query()->where('fpb_id', '101')->first()?->data_hora?->format('H:i'))->toBe('16:00');
+});
+
+test('an fpb import capitalizes player names and keeps club names', function () {
+    Http::fake([
+        'https://fpb.test/equipa' => Http::response(<<<'HTML'
+<h3 class="date">3 OUT 2026</h3>
+<a href="/ficha-de-jogo?internalID=100">
+<span class="fullName">AD MEALHADA</span>
+<span class="fullName">OVAR CLUBE</span>
+</a>
+<a href="/ficha-de-jogo?internalID=101">
+<span class="fullName">ILLIABUM</span>
+<span class="fullName">AD MEALHADA</span>
+</a>
+<div class="roster__player">
+<a href="/atletas/4242"></a>
+<h2 class="header__heading">JOÃO DA SILVA</h2>
+<div class="header_jnumber">7</div>
+</div>
+HTML),
+    ]);
+
+    $team = Team::factory()->for(Sport::factory())->for(Season::ensureCurrent())->create([
+        'fpb_url' => 'https://fpb.test/equipa',
+    ]);
+
+    $importer = app(FpbGamesImporter::class);
+    $importer->import($team, prune: false);
+    $importer->importPlayers($team, prune: false);
+
+    expect(Game::query()->where('fpb_id', '100')->first()?->adversario)->toBe('OVAR CLUBE')
+        ->and(Game::query()->where('fpb_id', '101')->first()?->adversario)->toBe('ILLIABUM')
+        ->and(Player::query()->where('fpb_id', '4242')->first()?->nome)->toBe('João Da Silva');
 });
