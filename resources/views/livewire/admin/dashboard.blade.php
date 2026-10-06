@@ -62,18 +62,30 @@
     <div class="mt-6 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
         <div class="mb-4">
             <flux:heading size="lg">Aniversários em {{ $mesAniversarios }}</flux:heading>
+            <flux:text class="mt-1 text-zinc-500">Quem faz anos este mês.</flux:text>
         </div>
 
-        @forelse ($aniversarios as $jogador)
-            <div class="flex items-center justify-between border-t border-zinc-100 py-2.5 first:border-t-0 dark:border-zinc-800">
-                <div>
-                    <div class="text-sm font-semibold text-zinc-900 dark:text-white">{{ $jogador->nome }}</div>
-                    <div class="text-xs text-zinc-500">{{ $jogador->equipas_nomes }} · {{ $jogador->data_nascimento?->format('d/m') }}</div>
-                </div>
-                <flux:button size="xs" variant="subtle" :href="route('admin.players.edit', $jogador)" wire:navigate>Editar</flux:button>
+        @if ($aniversarios->isEmpty())
+            <flux:text class="text-zinc-500">Este mês não há aniversários.</flux:text>
+        @else
+            <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                @foreach ($aniversarios as $jogador)
+                    <div class="flex items-center gap-3 rounded-xl border border-zinc-100 bg-zinc-50 px-3 py-3 dark:border-zinc-800 dark:bg-zinc-800/40">
+                        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-lg font-extrabold text-brand-700 dark:bg-brand-950 dark:text-brand-200">
+                            {{ $jogador->data_nascimento?->format('j') }}
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex flex-wrap items-center gap-2">
+                                <div class="text-sm font-semibold text-zinc-900 dark:text-white">{{ $jogador->nome }}</div>
+                                @if ($jogador->aniversario_hoje)
+                                    <flux:badge color="amber" size="sm">Hoje</flux:badge>
+                                @endif
+                            </div>
+                            <div class="text-xs text-zinc-500">{{ $jogador->equipas_nomes }} · faz {{ $jogador->idade }} anos</div>
+                        </div>
+                    </div>
+                @endforeach
             </div>
-        @empty
-            <flux:text class="text-zinc-500">Nenhum aniversário este mês.</flux:text>
-        @endforelse
+        @endif
     </div>
 </div>

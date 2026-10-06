@@ -77,6 +77,10 @@ test('the admin dashboard lists current-season players with a birthday this mont
     Player::factory()->for($currentTeam)->create([
         'nome' => 'Sem Data',
     ]);
+    Player::factory()->for($currentTeam)->create([
+        'nome' => 'Diana Hoje',
+        'data_nascimento' => '2010-10-06',
+    ]);
     Player::factory()->for($archiveTeam)->create([
         'nome' => 'Arquivo Outubro',
         'data_nascimento' => '2012-10-09',
@@ -84,10 +88,12 @@ test('the admin dashboard lists current-season players with a birthday this mont
 
     Livewire::test(Dashboard::class)
         ->assertSee('Aniversários em outubro')
-        ->assertSeeInOrder(['Bruno Outubro', '03/10', 'Ana Outubro', '20/10'])
+        ->assertSee('Quem faz anos este mês.')
+        ->assertSeeInOrder(['Bruno Outubro', 'faz 15 anos', 'Diana Hoje', 'Hoje', 'faz 16 anos', 'Ana Outubro', 'faz 14 anos'])
         ->assertDontSee('Carla Marco')
         ->assertDontSee('Sem Data')
-        ->assertDontSee('Arquivo Outubro');
+        ->assertDontSee('Arquivo Outubro')
+        ->assertDontSee('Editar');
 });
 
 test('the admin dashboard lists one birthday when the same athlete is on two current teams', function () {
@@ -123,6 +129,6 @@ test('the admin dashboard lists one birthday when the same athlete is on two cur
 
     Livewire::test(Dashboard::class)
         ->assertViewHas('aniversarios', fn ($aniversarios): bool => $aniversarios->count() === 2)
-        ->assertSeeInOrder(['Miguel Costa', 'Sub-16, Sub-18', '03/10', 'Ana Outubro', '20/10'])
+        ->assertSeeInOrder(['Miguel Costa', 'Sub-16, Sub-18', 'faz 15 anos', 'Ana Outubro', 'faz 14 anos'])
         ->assertDontSee('Sub-14');
 });

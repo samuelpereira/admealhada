@@ -77,6 +77,14 @@ class Dashboard extends Component
                         ->implode(', '),
                 );
 
+                $birthDate = $player->data_nascimento;
+
+                if ($birthDate !== null) {
+                    $today = Carbon::now();
+                    $player->setAttribute('idade', $today->year - $birthDate->year);
+                    $player->setAttribute('aniversario_hoje', $birthDate->month === $today->month && $birthDate->day === $today->day);
+                }
+
                 return $player;
             })
             ->sortBy(fn (Player $player): string => sprintf('%02d%s', $player->data_nascimento->day, mb_strtolower($player->nome)))
