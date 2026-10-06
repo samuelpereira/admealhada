@@ -69,19 +69,19 @@
             <flux:text class="text-zinc-500">Este mês não há aniversários.</flux:text>
         @else
             <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-                @foreach ($aniversarios as $jogador)
+                @foreach ($aniversarios as $aniversario)
                     <div class="flex items-center gap-3 rounded-xl border border-zinc-100 bg-zinc-50 px-3 py-3 dark:border-zinc-800 dark:bg-zinc-800/40">
                         <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-lg font-extrabold text-brand-700 dark:bg-brand-950 dark:text-brand-200">
-                            {{ $jogador->data_nascimento?->format('j') }}
+                            {{ $aniversario['dia'] }}
                         </div>
                         <div class="min-w-0">
                             <div class="flex flex-wrap items-center gap-2">
-                                <div class="text-sm font-semibold text-zinc-900 dark:text-white">{{ $jogador->nome }}</div>
-                                @if ($jogador->aniversario_hoje)
+                                <div class="text-sm font-semibold text-zinc-900 dark:text-white">{{ $aniversario['nome'] }}</div>
+                                @if ($aniversario['aniversario_hoje'])
                                     <flux:badge color="amber" size="sm">Hoje</flux:badge>
                                 @endif
                             </div>
-                            <div class="text-xs text-zinc-500">{{ $jogador->equipas_nomes }} · faz {{ $jogador->idade }} anos</div>
+                            <div class="text-xs text-zinc-500">{{ $aniversario['equipas_nomes'] }} · faz {{ $aniversario['idade'] }} anos</div>
                         </div>
                     </div>
                 @endforeach

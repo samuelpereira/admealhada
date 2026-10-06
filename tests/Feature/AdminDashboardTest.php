@@ -1,6 +1,7 @@
 <?php
 
 use App\Livewire\Admin\Dashboard;
+use App\Models\Coach;
 use App\Models\Game;
 use App\Models\Player;
 use App\Models\Season;
@@ -131,4 +132,44 @@ test('the admin dashboard lists one birthday when the same athlete is on two cur
         ->assertViewHas('aniversarios', fn ($aniversarios): bool => $aniversarios->count() === 2)
         ->assertSeeInOrder(['Miguel Costa', 'Sub-16, Sub-18', 'faz 15 anos', 'Ana Outubro', 'faz 14 anos'])
         ->assertDontSee('Sub-14');
+});
+
+test('the admin dashboard lists current-season coaches with a birthday this month', function () {
+    Carbon::setTestNow('2026-10-06');
+    $this->actingAs(User::factory()->admin()->create());
+
+    $sport = Sport::factory()->create();
+    $season = Season::ensureCurrent();
+    $sub16 = Team::factory()->for($sport)->for($season)->create(['nome' => 'Sub-16']);
+    $sub18 = Team::factory()->for($sport)->for($season)->create(['nome' => 'Sub-18']);
+    $archive = Team::factory()->for($sport)->for(Season::ensureForName('2024/2025'))->create(['nome' => 'Sub-14']);
+
+    $coach = Coach::factory()->create([
+        'nome' => 'Rui Costa',
+        'data_nascimento' => '1985-10-03',
+    ]);
+    $sub16->coaches()->attach($coach);
+    $sub18->coaches()->attach($coach);
+
+    $archiveCoach = Coach::factory()->create([
+        'nome' => 'Arquivo Treinador',
+        'data_nascimento' => '1980-10-09',
+    ]);
+    $archive->coaches()->attach($archiveCoach);
+
+    Coach::factory()->create([
+        'nome' => 'Sem Equipa',
+        'data_nascimento' => '1979-10-12',
+    ]);
+
+    Player::factory()->for($sub16)->create([
+        'nome' => 'Ana Outubro',
+        'data_nascimento' => '2012-10-20',
+    ]);
+
+    Livewire::test(Dashboard::class)
+        ->assertSeeInOrder(['Rui Costa', 'Treinador', 'faz 41 anos', 'Ana Outubro', 'faz 14 anos'])
+        ->assertDontSee('Sub-18')
+        ->assertDontSee('Arquivo Treinador')
+        ->assertDontSee('Sem Equipa');
 });

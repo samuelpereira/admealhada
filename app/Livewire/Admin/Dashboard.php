@@ -3,10 +3,13 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Album;
+use App\Models\Coach;
 use App\Models\Game;
 use App\Models\News;
 use App\Models\Player;
+use App\Models\Season;
 use App\Models\Team;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Collection;
@@ -49,26 +52,30 @@ class Dashboard extends Component
     }
 
     /**
-     * One row per athlete in the current season. The same fpb_id on several teams counts once.
+     * One row per person in the current season. The same player fpb_id on several teams counts once.
      *
-     * @return Collection<int, Player>
+     * @return Collection<int, array{nome: string, dia: int, equipas_nomes: string, idade: int, aniversario_hoje: bool}>
      */
     private function aniversariosDoMes(): Collection
     {
         $month = Carbon::now()->month;
 
-        return Player::query()
+        $jogadores = Player::query()
             ->with('team')
             ->onCurrentSeasonTeam()
             ->whereNotNull('data_nascimento')
             ->get()
             ->filter(fn (Player $player): bool => $player->data_nascimento?->month === $month)
             ->groupBy(fn (Player $player): string => $player->fpb_id ?? 'id:'.$player->id)
-            ->map(function (EloquentCollection $rows): Player {
+            ->map(function (EloquentCollection $rows): array {
                 /** @var Player $player */
                 $player = $rows->first();
-                $player->setAttribute(
-                    'equipas_nomes',
+                /** @var Carbon $birthDate */
+                $birthDate = $player->data_nascimento;
+
+                return $this->cartaoAniversario(
+                    $player->nome,
+                    $birthDate,
                     $rows
                         ->map(fn (Player $row): ?string => $row->team?->nome)
                         ->filter()
@@ -76,18 +83,41 @@ class Dashboard extends Component
                         ->sort()
                         ->implode(', '),
                 );
+            });
 
-                $birthDate = $player->data_nascimento;
+        $seasonId = Season::current()?->id;
 
-                if ($birthDate !== null) {
-                    $today = Carbon::now();
-                    $player->setAttribute('idade', $today->year - $birthDate->year);
-                    $player->setAttribute('aniversario_hoje', $birthDate->month === $today->month && $birthDate->day === $today->day);
-                }
+        $treinadores = Coach::query()
+            ->whereNotNull('data_nascimento')
+            ->whereHas('teams', fn (Builder $query) => $query->where('season_id', $seasonId))
+            ->get()
+            ->filter(fn (Coach $coach): bool => $coach->data_nascimento?->month === $month)
+            ->map(function (Coach $coach): array {
+                /** @var Carbon $birthDate */
+                $birthDate = $coach->data_nascimento;
 
-                return $player;
-            })
-            ->sortBy(fn (Player $player): string => sprintf('%02d%s', $player->data_nascimento->day, mb_strtolower($player->nome)))
+                return $this->cartaoAniversario($coach->nome, $birthDate, 'Treinador');
+            });
+
+        return $jogadores
+            ->concat($treinadores)
+            ->sortBy(fn (array $pessoa): string => sprintf('%02d%s', $pessoa['dia'], mb_strtolower($pessoa['nome'])))
             ->values();
+    }
+
+    /**
+     * @return array{nome: string, dia: int, equipas_nomes: string, idade: int, aniversario_hoje: bool}
+     */
+    private function cartaoAniversario(string $nome, Carbon $birthDate, string $equipas): array
+    {
+        $today = Carbon::now();
+
+        return [
+            'nome' => $nome,
+            'dia' => $birthDate->day,
+            'equipas_nomes' => $equipas,
+            'idade' => $today->year - $birthDate->year,
+            'aniversario_hoje' => $birthDate->month === $today->month && $birthDate->day === $today->day,
+        ];
     }
 }
