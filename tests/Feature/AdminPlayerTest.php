@@ -102,6 +102,20 @@ test('a hidden player stays off the public team page', function () {
         ->assertSee('Oculto');
 });
 
+test('a player wearing number zero is shown on the team card', function () {
+    $team = Team::factory()->for(Sport::factory())->for(Season::ensureCurrent())->create();
+    Player::factory()->for($team)->create([
+        'nome' => 'Jogador zero',
+        'papel' => 'jogador',
+        'numero' => 0,
+    ]);
+
+    $this->get($team->publicShowUrl())
+        ->assertOk()
+        ->assertSee('Jogador zero')
+        ->assertSee('text-white">0</span>', false);
+});
+
 test('an fpb import shows a new player and keeps a hidden player hidden', function () {
     Http::fake([
         'https://fpb.test/equipa' => Http::response(<<<'HTML'

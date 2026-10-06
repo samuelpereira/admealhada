@@ -37,7 +37,7 @@
                                 <div class="site-card">
                                     <div class="relative aspect-square overflow-hidden">
                                         <x-site.media :src="$jogador->foto" :seed="$jogador->id" :icon="false" />
-                                        @if ($jogador->numero)
+                                        @if ($jogador->numero !== null)
                                             <span class="absolute left-2 top-2 flex h-9 w-9 items-center justify-center rounded-md bg-rim-500 text-sm font-black text-white">{{ $jogador->numero }}</span>
                                         @endif
                                     </div>
