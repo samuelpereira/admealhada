@@ -68,7 +68,7 @@
             <div class="flex items-center justify-between border-t border-zinc-100 py-2.5 first:border-t-0 dark:border-zinc-800">
                 <div>
                     <div class="text-sm font-semibold text-zinc-900 dark:text-white">{{ $jogador->nome }}</div>
-                    <div class="text-xs text-zinc-500">{{ $jogador->team?->nome }} · {{ $jogador->data_nascimento?->format('d/m') }}</div>
+                    <div class="text-xs text-zinc-500">{{ $jogador->equipas_nomes }} · {{ $jogador->data_nascimento?->format('d/m') }}</div>
                 </div>
                 <flux:button size="xs" variant="subtle" :href="route('admin.players.edit', $jogador)" wire:navigate>Editar</flux:button>
             </div>

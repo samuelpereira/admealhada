@@ -7,8 +7,9 @@ use App\Models\Game;
 use App\Models\News;
 use App\Models\Player;
 use App\Models\Team;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -48,6 +49,8 @@ class Dashboard extends Component
     }
 
     /**
+     * One row per athlete in the current season. The same fpb_id on several teams counts once.
+     *
      * @return Collection<int, Player>
      */
     private function aniversariosDoMes(): Collection
@@ -60,6 +63,22 @@ class Dashboard extends Component
             ->whereNotNull('data_nascimento')
             ->get()
             ->filter(fn (Player $player): bool => $player->data_nascimento?->month === $month)
+            ->groupBy(fn (Player $player): string => $player->fpb_id ?? 'id:'.$player->id)
+            ->map(function (EloquentCollection $rows): Player {
+                /** @var Player $player */
+                $player = $rows->first();
+                $player->setAttribute(
+                    'equipas_nomes',
+                    $rows
+                        ->map(fn (Player $row): ?string => $row->team?->nome)
+                        ->filter()
+                        ->unique()
+                        ->sort()
+                        ->implode(', '),
+                );
+
+                return $player;
+            })
             ->sortBy(fn (Player $player): string => sprintf('%02d%s', $player->data_nascimento->day, mb_strtolower($player->nome)))
             ->values();
     }
