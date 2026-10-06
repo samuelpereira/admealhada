@@ -79,6 +79,17 @@ test('the player list follows the selected season and its teams', function () {
         ->assertDontSee('Jogador arquivo');
 });
 
+test('the player list filters by name', function () {
+    $team = Team::factory()->for(Sport::factory())->for(Season::ensureCurrent())->create();
+    Player::factory()->for($team)->create(['nome' => 'Gonçalo Dias']);
+    Player::factory()->for($team)->create(['nome' => 'Miguel Costa']);
+
+    Livewire::test(PlayersIndex::class)
+        ->set('pesquisa', 'goncalo')
+        ->assertSee('Gonçalo Dias')
+        ->assertDontSee('Miguel Costa');
+});
+
 test('a hidden player stays off the public team page', function () {
     $team = Team::factory()->for(Sport::factory())->for(Season::ensureCurrent())->create();
     Player::factory()->for($team)->create([

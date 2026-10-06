@@ -3,6 +3,10 @@
         <flux:button variant="primary" icon="plus" :href="route('admin.coaches.create')" wire:navigate>Novo treinador</flux:button>
     </x-admin.header>
 
+    <div class="mb-4 max-w-xs">
+        <flux:input wire:model.live.debounce.300ms="pesquisa" label="Nome" placeholder="Pesquisar por nome" />
+    </div>
+
     <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
         <table class="w-full text-left text-sm">
             <thead class="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wide text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800/50">
@@ -48,7 +52,9 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="px-4 py-10 text-center text-zinc-500">Ainda não há treinadores.</td>
+                        <td colspan="7" class="px-4 py-10 text-center text-zinc-500">
+                            {{ trim($pesquisa) !== '' ? 'Nenhum treinador encontrado.' : 'Ainda não há treinadores.' }}
+                        </td>
                     </tr>
                 @endforelse
             </tbody>

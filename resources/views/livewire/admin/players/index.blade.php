@@ -19,6 +19,8 @@
                 <flux:select.option value="{{ $t->id }}">{{ $t->adminLabel() }}</flux:select.option>
             @endforeach
         </flux:select>
+
+        <flux:input wire:model.live.debounce.300ms="pesquisa" label="Nome" placeholder="Pesquisar por nome" class="max-w-xs" />
     </div>
 
     <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-900">

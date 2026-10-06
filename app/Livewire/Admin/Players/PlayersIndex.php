@@ -6,6 +6,7 @@ use App\Livewire\Concerns\HandlesImageUpload;
 use App\Models\Player;
 use App\Models\Season;
 use App\Models\Team;
+use App\Support\NameFilter;
 use Flux\Flux;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\View\View;
@@ -25,6 +26,9 @@ class PlayersIndex extends Component
 
     #[Url]
     public string $team = '';
+
+    #[Url(except: '')]
+    public string $pesquisa = '';
 
     public function mount(): void
     {
@@ -64,7 +68,9 @@ class PlayersIndex extends Component
             ->orderBy('team_id')
             ->orderBy('ordem')
             ->orderBy('numero')
-            ->get();
+            ->get()
+            ->filter(fn (Player $player): bool => NameFilter::matches($player->nome, $this->pesquisa))
+            ->values();
 
         return view('livewire.admin.players.index', [
             'players' => $players,

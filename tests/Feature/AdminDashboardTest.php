@@ -53,3 +53,39 @@ test('the admin dashboard counts one player when the same fpb id is on two curre
             return $values['Jogadores'] === 2;
         });
 });
+
+test('the admin dashboard lists current-season players with a birthday this month', function () {
+    Carbon::setTestNow('2026-10-06');
+    $this->actingAs(User::factory()->admin()->create());
+
+    $sport = Sport::factory()->create();
+    $currentTeam = Team::factory()->for($sport)->for(Season::ensureCurrent())->create(['nome' => 'Seniores']);
+    $archiveTeam = Team::factory()->for($sport)->for(Season::ensureForName('2024/2025'))->create();
+
+    Player::factory()->for($currentTeam)->create([
+        'nome' => 'Ana Outubro',
+        'data_nascimento' => '2012-10-20',
+    ]);
+    Player::factory()->for($currentTeam)->create([
+        'nome' => 'Bruno Outubro',
+        'data_nascimento' => '2011-10-03',
+    ]);
+    Player::factory()->for($currentTeam)->create([
+        'nome' => 'Carla Marco',
+        'data_nascimento' => '2010-03-17',
+    ]);
+    Player::factory()->for($currentTeam)->create([
+        'nome' => 'Sem Data',
+    ]);
+    Player::factory()->for($archiveTeam)->create([
+        'nome' => 'Arquivo Outubro',
+        'data_nascimento' => '2012-10-09',
+    ]);
+
+    Livewire::test(Dashboard::class)
+        ->assertSee('Aniversários em outubro')
+        ->assertSeeInOrder(['Bruno Outubro', '03/10', 'Ana Outubro', '20/10'])
+        ->assertDontSee('Carla Marco')
+        ->assertDontSee('Sem Data')
+        ->assertDontSee('Arquivo Outubro');
+});

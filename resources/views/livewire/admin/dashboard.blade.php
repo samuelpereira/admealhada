@@ -58,4 +58,22 @@
             @endforelse
         </div>
     </div>
+
+    <div class="mt-6 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
+        <div class="mb-4">
+            <flux:heading size="lg">Aniversários em {{ $mesAniversarios }}</flux:heading>
+        </div>
+
+        @forelse ($aniversarios as $jogador)
+            <div class="flex items-center justify-between border-t border-zinc-100 py-2.5 first:border-t-0 dark:border-zinc-800">
+                <div>
+                    <div class="text-sm font-semibold text-zinc-900 dark:text-white">{{ $jogador->nome }}</div>
+                    <div class="text-xs text-zinc-500">{{ $jogador->team?->nome }} · {{ $jogador->data_nascimento?->format('d/m') }}</div>
+                </div>
+                <flux:button size="xs" variant="subtle" :href="route('admin.players.edit', $jogador)" wire:navigate>Editar</flux:button>
+            </div>
+        @empty
+            <flux:text class="text-zinc-500">Nenhum aniversário este mês.</flux:text>
+        @endforelse
+    </div>
 </div>

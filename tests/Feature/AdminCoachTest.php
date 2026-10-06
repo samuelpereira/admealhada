@@ -88,3 +88,13 @@ test('coaches on a team page follow the order they were assigned', function () {
         ->assertOk()
         ->assertSeeInOrder(['Zé Mendes', 'Ana Lopes']);
 });
+
+test('the coach list filters by name', function () {
+    Coach::factory()->create(['nome' => 'Rui Costa']);
+    Coach::factory()->create(['nome' => 'Ana Lopes']);
+
+    Livewire::test(CoachesIndex::class)
+        ->set('pesquisa', 'rui')
+        ->assertSee('Rui Costa')
+        ->assertDontSee('Ana Lopes');
+});

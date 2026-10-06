@@ -31,3 +31,25 @@ test('the game list follows the selected season and its teams', function () {
         ->assertSee('Adversario actual')
         ->assertDontSee('Adversario arquivo');
 });
+
+test('the game list filters by team or opponent name', function () {
+    $season = Season::ensureCurrent();
+    $sport = Sport::factory()->create();
+    $seniores = Team::factory()->for($sport)->for($season)->create(['nome' => 'Seniores']);
+    $sub16 = Team::factory()->for($sport)->for($season)->create(['nome' => 'Sub-16']);
+
+    Game::factory()->for($seniores)->create(['adversario' => 'Ovarense']);
+    Game::factory()->for($sub16)->create(['adversario' => 'Illiabum']);
+    Game::factory()->for($seniores)->create(['adversario' => 'São João']);
+
+    Livewire::test(GamesIndex::class)
+        ->set('pesquisa', 'ovar')
+        ->assertSee('Ovarense')
+        ->assertDontSee('Illiabum')
+        ->set('pesquisa', 'sub-16')
+        ->assertSee('Illiabum')
+        ->assertDontSee('Ovarense')
+        ->set('pesquisa', 'sao')
+        ->assertSee('São João')
+        ->assertDontSee('Illiabum');
+});

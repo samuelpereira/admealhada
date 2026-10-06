@@ -26,6 +26,8 @@
             <flux:select.option value="adiado">Adiado</flux:select.option>
             <flux:select.option value="cancelado">Cancelado</flux:select.option>
         </flux:select>
+
+        <flux:input wire:model.live.debounce.300ms="pesquisa" label="Equipa ou adversário" placeholder="Pesquisar" class="max-w-xs" />
     </div>
 
     <div class="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-700 dark:bg-zinc-900">

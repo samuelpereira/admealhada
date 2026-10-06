@@ -7,6 +7,7 @@ use App\Models\Game;
 use App\Models\News;
 use App\Models\Player;
 use App\Models\Team;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 use Livewire\Attributes\Layout;
@@ -33,6 +34,33 @@ class Dashboard extends Component
                 ->latest('updated_at')
                 ->take(5)
                 ->get(),
+            'aniversarios' => $this->aniversariosDoMes(),
+            'mesAniversarios' => $this->nomeDoMesAtual(),
         ]);
+    }
+
+    private function nomeDoMesAtual(): string
+    {
+        $now = Carbon::now();
+        $now->locale('pt');
+
+        return $now->translatedFormat('F');
+    }
+
+    /**
+     * @return Collection<int, Player>
+     */
+    private function aniversariosDoMes(): Collection
+    {
+        $month = Carbon::now()->month;
+
+        return Player::query()
+            ->with('team')
+            ->onCurrentSeasonTeam()
+            ->whereNotNull('data_nascimento')
+            ->get()
+            ->filter(fn (Player $player): bool => $player->data_nascimento?->month === $month)
+            ->sortBy(fn (Player $player): string => sprintf('%02d%s', $player->data_nascimento->day, mb_strtolower($player->nome)))
+            ->values();
     }
 }
